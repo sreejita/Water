@@ -1,0 +1,69 @@
+{% extends 'frontend/base.html' %}
+{% load i18n widget_tweaks %}
+{% load static %}
+{% block content %}
+{% load filters %}
+{% static "" as baseUrl %}
+
+<div class="row" style="padding-top: 30px">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Job statistics</h3>
+      </div>
+      <div class="panel-body">
+      {% if jobs_list %}
+        <table class="table table-striped table-bordered table-hover">
+          <thead class="thead-inverse">
+            <tr>
+              <th>Job ID</th>
+              <th>Job Name</th>
+              <th>Contact</th>
+              <th>State</th>
+              <th>Action</th>
+              <th>
+                More Info
+                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              </th>
+            </tr>
+          </thead>
+          {% for job in jobs_list %}
+            <tbody>
+              <tr>
+                <td><a href="{% url 'frontend:jobdetail' job.id %}">{{job.id}}</a></td>
+                <td>{{ job.name }}</td>
+                <td>{{job.email}}</td>
+                <td>{{ state_description|hash:job.jobstate}}</td>
+                <td>
+                    {% if job.jobstate == "TRIGGER_BLOCKING" %}
+                        <a class="btn btn-success" href="{% url 'frontend:trigger-blocking' job.id %}">Start Matching</a>
+                    {% elif job.jobstate == "SHOW_PROFILE" %}
+                        <a class="btn btn-success" href="{% url 'frontend:job-profile' job.id %}">Show profile</a>
+                    {% elif job.jobstate == "TRIGGER_PIPELINE" or job.jobstate == "ACTIVE_LEARNING_END" or job.jobstate == "ACTIVE_LEARNING_END_MATCHING" or job.jobstate == "EVAL_RULES_FINISH" %}
+                        <a class="btn btn-success" href="{% url 'frontend:trigger-pipeline' job.id %}">Continue matching process</a>
+                    {% elif job.jobstate == "SELECT_MODE" or job.jobstate == "TRAINING" or job.jobstate == "EVAL_RULES_TRAINING" or job.jobstate == "CREATE_UPLOAD_A" or job.jobstate == "CREATE_UPLOAD_B" or job.jobstate == "GOLDEN_MODE_FILE_UPLOAD" or job.jobstate == "ADDITIONAL_POSITIVE_LABELS_NEEDED" or job.jobstate == "NEGATIVE_LABELS_NEEDED" or job.jobstate == "SAMPLES_READY" or job.jobstate == "ADDITIONAL_NEGATIVE_LABELS_NEEDED" or job.jobstate == "QUESTION_NEEDED" %}
+                        <a class="btn btn-primary" href="{% url 'frontend:jobdetail' job.id %}">User input required</a>
+                    {% elif job.jobstate == "ERROR"%}
+                    <a class="btn btn-danger" href="{% url 'frontend:taskerror' job.id %}">Error</a>
+                    {% else %}
+                        <a class="btn btn-default disabled" href="{% url 'frontend:jobdetail' job.id %}">Processing..</a>
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'frontend:job_progress' job.id %}">View progress</a></td>
+              </tr>
+            </tbody>
+          {% endfor %}
+        </table>
+      {% else %}
+          <p>There are no jobs</p>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+  <script type="text/javascript">
+    window.setTimeout(function(){ document.location.reload(true); }, 5000);
+  </script>
+{% endblock %}

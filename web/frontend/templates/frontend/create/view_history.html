@@ -1,0 +1,71 @@
+{% extends 'frontend/base.html' %}
+{% load i18n widget_tweaks %}
+{% load static %}
+{% block content %}
+{% load filters %}
+{% static "" as baseUrl %}
+
+<div class="row" style="padding-top: 30px">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Complete history of submitted templates.</h3>
+            </div>
+            <div class="panel-body">
+                {% if dag_list %}
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>Dag ID</th>
+                        <th>Dag Name</th>
+                        <th>Submitted by</th>
+                        <th>Template Name</th>
+                        <th>Task ID</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        <th>
+                            More Info
+                            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                        </th>
+                    </tr>
+                    </thead>
+                    {% for dag in dag_list %}
+                    <tbody>
+                    <tr>
+                        <td><a href="{% url 'frontend:wf_progress' dag.id %}">{{ dag.id }}</a></td>
+                        <td>{{ dag.name }}</td>
+                        <td>{{ dag.owner }}</td>
+                        <td>{{ dag.template_id }}</td>
+                        <td>{{ dag.current_task_id }}</td>
+                        <td>{{ state_description|hash:dag.status}}</td>
+                        <td>
+                            {% if dag.template_id == "upload_table" %}
+                            <input type="button" name="theButton" id="profile-step" value="View Profile" class="btn btn-success" data-dagid="{{ dag.id }}">
+                            {% endif %}
+                        </td>
+                        <td><a href="{% url 'frontend:job_progress' dag.id %}">View progress</a></td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+                {% else %}
+                <p>There are no submitted or completed workflows. Please submit a job.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+      window.setTimeout(function(){ document.location.reload(true); }, 5000);
+
+      $(document).on('click', '.btn', function () {
+          var dag_id = $(this).data('dagid');
+          if (dag_id) {
+              window.location = '/view_profile?dag_id=' + dag_id;
+          }
+      })
+  </script>
+{% endblock %}

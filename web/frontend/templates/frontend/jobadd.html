@@ -1,0 +1,15 @@
+{% extends 'frontend/base.html' %}
+{% load bootstrap3 %}
+
+{% block title %}Upload two tables{% endblock %}
+{% block content %}
+{# Display a form #}
+<form action="/frontend/job/add/" method="post" class="form" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% buttons submit='OK' reset="Cancel" %}{% endbuttons %}
+</form>
+
+{# Read the documentation for more information #}
+
+{% endblock %}

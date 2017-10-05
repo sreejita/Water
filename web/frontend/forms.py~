@@ -1,0 +1,455 @@
+from django.forms import ModelForm
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+from django import forms
+from django.utils.safestring import mark_safe
+from django.contrib.auth.forms import AuthenticationForm
+import pandas as pd
+from io import BytesIO
+from .tasks import *
+import re
+
+
+from .models import Job
+
+
+class WrappedJobForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = ['fileA', 'fileB', 'goldendata', 'columnmappings', 'featurecosts']
+
+    def save(self):
+        job = super(WrappedJobForm, self).save(commit=False)
+
+        for chunk in job.fileA.file.chunks():
+            data = BytesIO(chunk)
+            break
+        df = pd.read_csv(data)
+        job.setNextJobState('CREATED')
+        job.headerA = df.columns.tolist()
+
+        for chunk in job.fileB.file.chunks():
+            data = BytesIO(chunk)
+            break
+        df = pd.read_csv(data)
+        job.headerB = df.columns.tolist()
+
+        job.save()
+        get_seeds.delay(job.id)
+        return job
+
+
+class LabelExamplesForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        rows = kwargs.pop('rows')
+        super(LabelExamplesForm, self).__init__(*args, **kwargs)
+        for row in rows:
+            self.fields['custom_%s' % (row[0])] = forms.BooleanField(label=row, required=False)
+
+    def labeled_examples(self):
+        for name, value in self.cleaned_data.items():
+            if name.startswith('custom_'):
+                if (value):
+                    yield (self.fields[name].label, value)
+
+
+class HorizRadioRenderer(forms.RadioSelect.renderer):
+    def render(self):
+        """Outputs radios"""
+        html = u'<div class="btn-group" data-toggle="buttons">'
+        for w in self:
+            if w.choice_value == 't':
+                html += u'<label class="train-success btn btn-default">'
+                html += u'<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>'
+            elif w.choice_value == 'f':
+                html += u'<label class="train-danger btn btn-default">'
+                html += u'<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>'
+            else:
+                html += u'<label class="train-info btn btn-default">'
+            html += u'<input type="radio" value="' + w.choice_value + '" name="' + w.name + '" id="' + w.id_for_label + '">'
+            html += w.choice_label + u'</label>'
+        html += u'</div'
+        return mark_safe(html)
+
+
+class LabelTrainingForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        ids = kwargs.pop('ids')
+        super(LabelTrainingForm, self).__init__(*args, **kwargs)
+        for idA, idB in ids:
+            label = str(idA) + "," + str(idB)
+            self.fields['custom_%s_%s' % (idA, idB)] = forms.ChoiceField(label=label, widget=forms.RadioSelect(
+                renderer=HorizRadioRenderer), choices=[('t', "Yes"), ('f', "No"), ('u', "Unsure")], required=True)
+
+    def labeled_examples(self):
+        for name, value in self.cleaned_data.items():
+            if name.startswith('custom_'):
+                yield self.fields[name].label, value
+
+
+class AdditionalLabelExamplesForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        self.headerA = kwargs.pop('headerA')
+        self.headerB = kwargs.pop('headerB')
+        self.body = kwargs.pop('body')
+        super(AdditionalLabelExamplesForm, self).__init__(*args, **kwargs)
+
+        for (i, pair) in enumerate(self.body):
+            for (j, column) in enumerate(zip(self.headerA, self.headerB)):
+                self.fields['custom_%d_A_%s' % (i, column[0])] = forms.CharField(initial=pair[0][j], required=False)
+                self.fields['custom_%d_B_%s' % (i, column[1])] = forms.CharField(initial=pair[1][j], required=False)
+
+    def hasSecondPair(self):
+        return len(self.body) > 1
+
+    def firstPairA(self):
+        for name in self.fields:
+            if name.startswith('custom_0_A'):
+                yield (self[name])
+
+    def firstPairB(self):
+        for name in self.fields:
+            if name.startswith('custom_0_B'):
+                yield (self[name])
+
+    def secondPairA(self):
+        for name in self.fields:
+            if name.startswith('custom_1_A'):
+                yield (self[name])
+
+    def secondPairB(self):
+        for name in self.fields:
+            if name.startswith('custom_1_B'):
+                yield (self[name])
+
+    def labeled_examples(self):
+        for name, value in self.cleaned_data.items():
+            if name.startswith('custom_'):
+                yield (name, self.fields[name].label, value)
+
+
+class LabelPosExamplesForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        examples = kwargs.pop('top20')
+        super(LabelPosExamplesForm, self).__init__(*args, **kwargs)
+
+        for example in examples:
+            self.fields['custom_%s' % (example[0])] = forms.BooleanField(label=example, required=False)
+
+    def labeled_examples(self):
+        for name, value in self.cleaned_data.items():
+            if name.startswith('custom_'):
+                if (value):
+                    yield (self.fields[name].label, value)
+
+
+class AddLabelPosExamplesForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        self.header = kwargs.pop('header')
+        self.body = kwargs.pop('body')
+        super(AddLabelPosExamplesForm, self).__init__(*args, **kwargs)
+
+        for (i, pair) in enumerate(self.body):
+            for (j, column) in enumerate(self.header):
+                self.fields['custom_%d_A_%s' % (i, column)] = forms.CharField(label="%s_A" % (column),
+                                                                              initial=pair[0][j], required=False)
+                self.fields['custom_%d_B_%s' % (i, column)] = forms.CharField(label="%s_B" % (column),
+                                                                              initial=pair[1][j], required=False)
+
+    def hasSecondPair(self):
+        return len(self.body) > 1
+
+    def firstPairHeader(self):
+        return self.header
+
+    def firstPairA(self):
+        for name in self.fields:
+            if name.startswith('custom_0_A'):
+                yield (self[name])
+
+    def firstPairB(self):
+        for name in self.fields:
+            if name.startswith('custom_0_B'):
+                yield (self[name])
+
+    def secondPairA(self):
+        for name in self.fields:
+            if name.startswith('custom_1_A'):
+                yield (self[name])
+
+    def secondPairB(self):
+        for name in self.fields:
+            if name.startswith('custom_1_B'):
+                yield (self[name])
+
+    def labeled_examples(self):
+        for name, value in self.cleaned_data.items():
+            if name.startswith('custom_'):
+                yield (name, self.fields[name].label, value)
+
+
+class LabelNegExamplesForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        examples = kwargs.pop('example20')
+        super(LabelNegExamplesForm, self).__init__(*args, **kwargs)
+
+        for example in examples:
+            self.fields['custom_%s' % (example[0])] = forms.BooleanField(label=example, required=False)
+
+    def labeled_examples(self):
+        for name, value in self.cleaned_data.items():
+            if name.startswith('custom_'):
+                if (value):
+                    yield (self.fields[name].label, value)
+
+
+class AddLabelNegExamplesForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = []
+
+    def __init__(self, *args, **kwargs):
+        self.header = kwargs.pop('header')
+        self.body = kwargs.pop('body')
+        super(AddLabelNegExamplesForm, self).__init__(*args, **kwargs)
+
+        for (i, pair) in enumerate(self.body):
+            for (j, column) in enumerate(self.header):
+                self.fields['custom_%d_A_%s' % (i, column)] = forms.CharField(label="%s_A" % (column),
+                                                                              initial=pair[0][j], required=False)
+                self.fields['custom_%d_B_%s' % (i, column)] = forms.CharField(label="%s_B" % (column),
+                                                                              initial=pair[1][j], required=False)
+
+    def hasSecondPair(self):
+        return len(self.body) > 1
+
+    def firstPairHeader(self):
+        return self.header
+
+    def firstPairA(self):
+        for name in self.fields:
+            if name.startswith('custom_0_A'):
+                yield (self[name])
+
+    def firstPairB(self):
+        for name in self.fields:
+            if name.startswith('custom_0_B'):
+                yield (self[name])
+
+    def secondPairA(self):
+        for name in self.fields:
+            if name.startswith('custom_1_A'):
+                yield (self[name])
+
+    def secondPairB(self):
+        for name in self.fields:
+            if name.startswith('custom_1_B'):
+                yield (self[name])
+
+    def labeled_examples(self):
+        for name, value in self.cleaned_data.items():
+            if name.startswith('custom_'):
+                yield (name, self.fields[name].label, value)
+
+
+class QuestionNeededForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.header = kwargs.pop('header')
+        options = []
+        for head in self.header:
+            options.append((head, head))
+        super(QuestionNeededForm, self).__init__(*args, **kwargs)
+        self.fields['title'] = forms.CharField(label='Title*', max_length=200,
+                                               help_text='Tooltip description goes here for title',
+                                               widget=forms.TextInput(attrs={'type': 'text', 'class': "form-control"}))
+        self.fields['description'] = forms.CharField(label='Description*', max_length=200,
+                                                     help_text='Tooltip description goes here for desc',
+                                                     widget=forms.TextInput(
+                                                         attrs={'type': 'text', 'class': "form-control"}))
+        self.fields['keywords'] = forms.CharField(label='Keywords*', max_length=200,
+                                                  help_text='Tooltip description goes here for keyword',
+                                                  widget=forms.TextInput(
+                                                      attrs={'type': 'text', 'class': "form-control"}))
+        self.fields['answer_format'] = forms.ChoiceField(
+            widget=forms.Select(attrs={'class': "selectpicker", 'data-style': 'btn-primary'}),
+            choices=([('1', 'Same/Different/Can\'t Say'), ('2', 'Same/Different'), ]), initial=1, required=False)
+        self.fields['introduction'] = forms.CharField(label='Introduction*', max_length=4000,
+                                                      widget=forms.Textarea(attrs={'class': "form-control",
+                                                                                   'placeholder': 'Enter Introduction',
+                                                                                   'rows': 3, 'cols': 80}))
+        self.fields['instructions'] = forms.CharField(label='Instructions*', max_length=4000,
+                                                      widget=forms.Textarea(attrs={'class': "form-control",
+                                                                                   'placeholder': 'Enter Instructions',
+                                                                                   'rows': 3, 'cols': 80}))
+        self.fields['question'] = forms.CharField(label='Questions*', max_length=200,
+                                                  widget=forms.Textarea(
+                                                      attrs={'class': "form-control", 'placeholder': 'Enter Questions',
+                                                             'rows': 2, 'cols': 80}))
+        self.fields['comments'] = forms.CharField(label='Comments (optional)', max_length=200, required=False,
+                                                  widget=forms.Textarea(attrs={'class': "form-control",
+                                                                               'placeholder': 'Please help us improve this HIT by including any Questions and/or Comments',
+                                                                               'rows': 2, 'cols': 80}))
+        self.fields['attributes'] = forms.MultipleChoiceField(label="Select attributes to match",
+                                                              widget=forms.SelectMultiple(
+                                                                  attrs={'class': "selectpicker",
+                                                                         'data-style': 'btn-warning'}), choices=options,
+                                                              required=True)
+        self.initial['attributes'] = self.header
+
+
+class PersonalInfoForm(forms.Form):
+    job_name = forms.CharField(label='Job Name', max_length=100,
+                               widget=forms.TextInput(attrs={'placeholder': 'Enter Job Name'}))
+    email = forms.EmailField(label='Email',
+                             widget=forms.TextInput(attrs={'placeholder': 'Enter Email address to notify'}))
+    email2 = forms.EmailField(label='Confirm Email',
+                              widget=forms.TextInput(attrs={'placeholder': 'Confirm you Email address'}))
+
+
+# YG
+class UploadDatasetForm(forms.Form):
+    wfid = forms.CharField(label='Workflow ID',
+                           max_length=100, required=True,
+                           widget=forms.TextInput(attrs={'placeholder': 'Workflow ID'}))
+    fragid = forms.CharField(label='Fragment ID', max_length=100, required=True,
+                             widget=forms.TextInput(attrs={'placeholder': 'Fragment ID'}))
+    name = forms.CharField(label='Name*',
+                           help_text='The file uploader will appear once you enter the dataset name',
+                           max_length=100, required=True,
+                           widget=forms.TextInput(attrs={'placeholder': 'Please enter your dataset name'}))
+    description = forms.CharField(label='Description (optional)', max_length=100, required=False,
+                                  widget=forms.Textarea(attrs={'placeholder': 'Describe your data here.', 'rows': '2'}))
+
+    docfile = forms.FileField(label='Choose file')
+
+
+class RegistrationForm(forms.Form):
+    username = forms.CharField(label='Username',
+                               max_length=100, required=True,
+                               widget=forms.TextInput(attrs={'placeholder': 'Please enter a username'}))
+    password1 = forms.CharField(label='Password',
+                                max_length=100, required=True,
+                                widget=forms.PasswordInput(attrs={'placeholder': 'Please enter a password'}))
+    password2 = forms.CharField(label='Re-enter password',
+                                max_length=100, required=True,
+                                widget=forms.PasswordInput(attrs={'placeholder': 'Please reenter your password'}))
+    # email = forms.CharField(label='Email*',max_length=100, required=True,
+    #                        widget=forms.TextInput(attrs={'placeholder': 'Please enter a username'}))
+    email = forms.EmailField(label='Email', required=True)
+
+    def clean_password2(self):
+        if 'password1' in self.cleaned_data:
+            password1 = self.cleaned_data['password1']
+            password2 = self.cleaned_data['password2']
+            if password1 == password2:
+                return password2
+        raise forms.ValidationError('Passwords do not match.')
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if not re.search(r'^\w+$', username):
+            raise forms.ValidationError('Username can only contain alphanumeric characters and the underscore.')
+        try:
+            User.objects.get(username=username)
+        except ObjectDoesNotExist:
+            return username
+        raise forms.ValidationError('Username is already taken.')
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(label="Username", max_length=30,
+                               widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'username'}))
+    password = forms.CharField(label="Password", max_length=30,
+                               widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'password'}))
+
+
+class FileUploadForm(forms.Form):
+    docfile = forms.FileField(label='Select a file',
+                              help_text='max. 42 megabytes')
+    days = forms.ChoiceField(widget=forms.Select(), choices=([('1', '1'), ('2', '2'), ('3', '3'), ]), initial=1,
+                             required=False)
+
+
+class FileUploadFormList(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.header = kwargs.pop('header')
+        options = []
+        for head in self.header:
+            options.append((head, head))
+        super(FileUploadFormList, self).__init__(*args, **kwargs)
+        self.fields['list'] = forms.ChoiceField(widget=forms.Select(
+            attrs={'class': 'selectpicker show-tick show-menu-arrow', 'data-width': "fit",
+                   'data-style': "btn-warning"}), choices=[(o, o) for o in self.header], initial=self.header[0],
+            required=False)
+
+
+def getPairCountDropDownField():
+    numbers = range(1, 21)
+    return forms.ChoiceField(widget=forms.Select(
+        attrs={'class': 'selectpicker show-tick show-menu-arrow', 'data-width': "fit", 'data-style': "btn-warning"}),
+        choices=[(i, i) for i in numbers], initial=numbers[4], required=True)
+
+
+class SelectModeForm(forms.Form):
+    pair_count = getPairCountDropDownField()
+    docfile = forms.FileField(required=False, label='Select a file', help_text='max. 42 megabytes')
+
+
+class SelectCrowdModeForm(forms.Form):
+    docfile = forms.FileField(required=False, label='Select a file', help_text='max. 42 megabytes')
+    pair_count = getPairCountDropDownField()
+    reward_amount = forms.FloatField(label='Reward amount for labelling each batch',
+                                     help_text='Tooltip description goes here for reward amount',
+                                     widget=forms.TextInput(
+                                         attrs={'type': 'number', 'step': 0.01, 'class': "form-control", 'min': 0}))
+    assignment_duration_hit = forms.IntegerField(label='Assignment duration for this HIT (hours)',
+                                                 help_text='Tooltip description goes here for assignment duration',
+                                                 widget=forms.TextInput(
+                                                     attrs={'type': 'number', 'class': "form-control", 'min': 0}))
+    auto_approval_delay = forms.IntegerField(label='Auto Approval Delay (days)',
+                                             help_text='Tooltip description goes here for auto approval delay',
+                                             widget=forms.TextInput(
+                                                 attrs={'type': 'number', 'class': "form-control", 'min': 0}))
+    hit_lifetime = forms.IntegerField(label='HIT lifetime (days)',
+                                      help_text='Tooltip description goes here for hit lifetime',
+                                      widget=forms.TextInput(
+                                          attrs={'type': 'number', 'class': "form-control", 'min': 0}))
+    initial_assignment = forms.IntegerField(label='Number of Initial Assignment',
+                                            help_text='Tooltip description goes here for initial assignment',
+                                            widget=forms.TextInput(
+                                                attrs={'type': 'number', 'class': "form-control", 'min': 0}))
+    mturk_access_key = forms.CharField(label='MTurk Access Key', max_length=300,
+                                       help_text='Tooltip description goes here for mturk_access_key',
+                                       widget=forms.TextInput(attrs={'type': 'text', 'class': "form-control"}))
+    mturk_secret_key = forms.CharField(label='MTurk Secret Key', max_length=300,
+                                       help_text='Tooltip description goes here for mturk_secret_key',
+                                       widget=forms.TextInput(attrs={'type': 'text', 'class': "form-control"}))
+
+
+class JobProgressForm(forms.Form):
+    job_id = forms.IntegerField(label='Job ID', help_text='Enter Job ID to get the progress',
+                                widget=forms.TextInput(attrs={'type': 'number', 'class': "form-control", 'min': 1}))

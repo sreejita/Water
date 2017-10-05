@@ -1,0 +1,117 @@
+{% extends 'base_home.html' %}
+{% block content %}
+{% load static %}
+<div class="page-header" id="banner">
+    <div class="row">
+        <div class="col-md-12 center-align">
+            <div>
+                <h1 style="color: #1e2f45;">CloudMatcher</h1>
+                <p class="lead" style="color: #0f0f0f">CloudMatcher lets you upload datasets, browse your data and identify matching records between two uploaded datasets.</p>
+            </div>
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" style="max-height: 250px; margin: 0 auto">
+                    <div class="item active" style="max-height: 250px; margin: 0 auto">
+                        <img src={% static "images/bg7.jpg" %} alt="" style="width:100%;">
+                        <div class="container">
+                            <div class="carousel-caption">
+                                <h3>CloudMatcher version 0.2.0 to come soon.</h3>
+                                <p class="lead">CloudMatcher team is coming up with new changes in 0.2.0 soon. Stay tuned.</p>
+                                <a class="btn btn-large btn-primary" href="#">Learn more</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item" style="max-height: 250px; margin: 0 auto">
+                        <img src={% static "images/bg7.jpg" %} alt="" style="width:100%;">
+                        <div class="container">
+                            <div class="carousel-caption">
+                                <h3>Want to learn about CloudMatcher?</h3>
+                                <p class="lead">If you are a first time user, we recommend reading the documentation. Please click here.</p>
+                                <a class="btn btn-large btn-primary" href="#">Learn more</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item" style="max-height: 250px; margin: 0 auto">
+                        <img src={% static "images/bg7.jpg" %} alt="" style="width:100%;">
+                        <div class="container">
+                            <div class="carousel-caption">
+                                <h3>New features !!</h3>
+                                <p class="lead">Now, you can upload and browse all your tables online. Please click here to know more.</p>
+                                <a class="btn btn-large btn-primary" href="#">New features</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Left and right controls -->
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-box">
+                    <div class="form-top">
+                        <div class="form-top-left">
+                            <h3 style="color: #3c3c3c;">Login to CloudMatcher</h3>
+                            <p>All fields are required</p>
+                        </div>
+                        <div class="form-top-right">
+                            <i class="fa fa-key"></i>
+                        </div>
+                    </div>
+                    <div class="form-top">
+                        <form role="form" method="post" class="login-form" enctype="multipart/form-data" action="{% url 'frontend:login' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="sr-only" for="id_username">Username</label>
+                                <input type="text" name="username" placeholder="Enter username ..." class="username form-control" id="id_username" required="required">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="id_password">Password</label>
+                                <input type="password" name="password" placeholder="Enter password ..." class="password form-control" id="id_password" required="required">
+                            </div>
+                            <button type="submit" class="btn" style="font-size: large">Sign in!</button>
+                            <input type="hidden" name="next" value=""/>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    {% if form.errors %}
+                    <p style="color: red"><strong>Your username and password didn't match. Please try again.</strong></p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-1 middle-border"></div>
+            <div class="col-md-1"></div>
+            <br>
+            <br>
+            <div class="col-md-5">
+                <p style="font-family: Roboto; font-size: large; color: #1e2f45"><b>New users - </b> Please create an account to use CloudMatcher services and read the documentation.</p>
+                <hr>
+                <p><a href="{% url 'frontend:register' %}" class="btn btn-large btn-primary disabled" style="height: 40px; width: 150px; font-size: large">Create Account</a>
+                <a class="btn btn-primary btn-large" style="height: 40px; width: 150px; font-size: large">Learn more &raquo;</a>
+                </p>
+                <br>
+                <p class="center-align">Currently, the new registration button is disabled. Please send us an email at uwcloudmatcher@gmail.com for more details.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

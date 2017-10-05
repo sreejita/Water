@@ -1,0 +1,107 @@
+{% extends 'frontend/base.html' %}
+{% load i18n widget_tweaks %}
+{% load bootstrap3 %}
+{% block content %}
+    <div class="row" style="padding-top: 30px">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ panel_label }}</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="{% url next_url job.id %}" method="post" class="form">
+                        {% csrf_token %}
+                        <div class="card">
+                            <div class="card-header">
+                                Example - 1
+                            </div>
+                            <br/>
+                            <div class="card-block">
+                                <div class="col-md-12">
+                                    <table>
+                                        <tr>
+                                            <th>File A</th>
+                                        </tr>
+                                        <tr>
+                                            {% for header in headerA %}
+                                                 <th>{{ header}}</th>
+                                            {% endfor %}
+                                        </tr>
+                                        <tr>
+                                            {% for pair in form.firstPairA %}
+                                                <td>{% bootstrap_field pair field_class='cell-margin' show_label=False %}</td>
+                                            {% endfor %}
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-12">
+                                    <table>
+                                        <tr>
+                                            <th>File B</th>
+                                        </tr>
+                                        <tr>
+                                            {% for header in headerB %}
+                                                 <th>{{ header}}</th>
+                                            {% endfor %}
+                                        </tr>
+                                        <tr>
+                                            {% for pair in form.firstPairB %}
+                                                <td>{% bootstrap_field pair field_class='cell-margin' show_label=False %}</td>
+                                            {% endfor %}
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        {% if form.hasSecondPair %}
+                            <hr style="width: 100%; color: black; height: 1px; background-color:black;"/>
+                            <div class="card">
+                                <div class="card-header">
+                                    Example - 2
+                                </div>
+                                <br/>
+                                <div class="card-block">
+                                <div class="col-md-12">
+                                    <table>
+                                        <tr>
+                                            <th>File A</th>
+                                        </tr>
+                                        <tr>
+                                            {% for header in headerA %}
+                                                 <th>{{ header}}</th>
+                                            {% endfor %}
+                                        </tr>
+                                        <tr>
+                                            {% for pair in form.secondPairA %}
+                                                <td>{% bootstrap_field pair field_class='cell-margin' show_label=False %}</td>
+                                            {% endfor %}
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-12">
+                                    <table>
+                                        <tr>
+                                            <th>File B</th>
+                                        </tr>
+                                        <tr>
+                                            {% for header in headerB %}
+                                                 <th>{{ header}}</th>
+                                            {% endfor %}
+                                        </tr>
+                                        <tr>
+                                            {% for pair in form.secondPairB %}
+                                                <td>{% bootstrap_field pair field_class='cell-margin' show_label=False %}</td>
+                                            {% endfor %}
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <a href="{% url 'frontend:index' %}" class="btn btn-default">Home</a>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

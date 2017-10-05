@@ -1,0 +1,55 @@
+{% extends 'frontend/base.html' %}
+{% load i18n widget_tweaks %}
+{% load bootstrap3 %}
+{% block content %}
+    <div class="row" style="padding-top: 30px">
+        <div class="col-md-12">
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ panel_label }}</h3>
+                </div>
+                <div class="panel-body panel_body">
+                    <form action="{% url next_url job.id %}" method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mydiv">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead class="thead-inverse">
+                                  <tr>
+                                    <th style="width: 120px">{{ check_header }}</th>
+                                    <th>Similarity</th>
+                                    {% for header in headers %}
+                                        <th>{{ header }}</th>
+                                    {% endfor %}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for field in form %}
+                                        {% with forloop.counter|cut:" " as index %}
+                                            <tr>
+                                                <td rowspan="2" style="text-align: center; vertical-align: middle">{{ field }}</td>
+                                                {% for row in crows|slice:index|last %}
+                                                    <td rowspan="2" style="text-align: center; vertical-align: middle">{{ row }}</td>
+                                                {% endfor %}
+                                                {% for row in lrows|slice:index|last %}
+                                                    <td>{{ row }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                            <tr>
+                                                {% for row in rrows|slice:index|last %}
+                                                    <td>{{ row }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                        {% endwith %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="{% url 'frontend:index' %}" class="btn btn-default">Home</a>
+                        <button type="submit" class="btn btn-primary">Next</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

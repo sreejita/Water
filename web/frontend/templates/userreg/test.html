@@ -1,0 +1,81 @@
+{% extends 'frontend/base.html' %}
+{% block content %}
+{% load static %}
+<div class="page-header" id="banner">
+  <div class="row">
+    <div class="col-md-12 center-align">
+
+        <!--<p class="lead">A powerful tool that finds matches between two datasets. We apply machine learning and crowdsourcing techniques to identify matching records between two datasets and use big data framework to solve problems of scaling. </p>-->
+        <div class="well">
+            <h1>Welcome to CloudMatcher.io!</h1>
+            <p class="lead">CloudMatcher.io lets you upload datasets, explore your data and identify matching records between two uploaded datasets in a scalable way.</p>
+            <p><b>First-time users?</b> Please read more to understand CloudMatcher and go through the documentation or tutorials.</p>
+            <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+        </div>
+
+        <div class="container">
+          <!-- Example row of columns -->
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="marketing-img" width="70px" height="50px" src={% static "images/upload_icon.png" %}/>
+                    <br>
+                    <br>
+                    <h2>Upload a new dataset</h2>
+                    <p>Start by uploading a dataset to CloudMatcher that you would like to explore or use in identifying matching pairs. Upon uploading, we will provide you a profile statistics on your uploaded dataset. </p>
+                    <p>
+                        <a href="{% url 'frontend:upload_data'%}" class="btn btn-success" href="#" role="button">
+                            <i class='glyphicon glyphicon-upload'></i>
+                            Upload a new dataset
+                        </a>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <img class="marketing-img" width="70px" height="70px" src={% static "images/Data_Analysis.png" %}/>
+                    <h2>Explore your data</h2>
+                    <p>Getting insights from the data is important and so CloudMatcher helps you explore and understand your data. Our goal is to identify matching definition upon understanding the dataset thoroughly. </p>
+                    <p>
+                        <a href="{% url 'frontend:create-personal' 0 %}" class="btn btn-success" href="#" role="button">
+                            <i class="glyphicon glyphicon-zoom-in"></i>
+                            Explore data
+                        </a>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <img class="marketing-img" width="100px" height="50px" src={% static "images/em.png" %}/>
+                    <br>
+                    <br>
+                    <h2>Identify matching pairs</h2>
+                    <p>Entity Matching (EM) finds disparate data instances that refer to the same real-world entity. CloudMatcher aims to be a fast, easy-to-use, scalable, and highly available EM service on the Web.</p>
+                    <p>
+                        <a class="btn btn-success" href="#" role="button">
+                            <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                            Entity Matching
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <hr>
+
+            <footer>
+                <p>&copy; 2017 CloudMatcher.io, UW-Madison.</p>
+            </footer>
+        </div> <!-- /container -->
+
+<!--        <a href="{% url 'frontend:create-personal' 0 %}" class="btn btn-primary">Create a new job</a>
+        <a href="{% url 'frontend:job_statistics' %}" class="btn btn-success">Jobs submitted</a>-->
+    </div>
+  </div>
+</div>
+
+<!--
+<div class="row">
+  <div class="col-md-12">
+    <div class="col-md-12">
+      <img src={% static "images/stage_home.png" %}/>
+    </div>
+  </div>
+</div>
+-->
+
+{% endblock %}

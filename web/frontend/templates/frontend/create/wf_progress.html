@@ -1,0 +1,160 @@
+{% extends 'frontend/base.html' %}
+{% load i18n widget_tweaks %}
+{% load static %}
+{% block content %}
+{% load filters %}
+{% static "" as baseUrl %}
+
+<div class="row" style="padding-top: 30px">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Complete information on the submitted template.</h3>
+            </div>
+            <div class="panel-body">
+                {% if wf_list %}
+                <div style="display: none">
+                    <p>
+                    <div id="wf_id">{{ wf_id }}</div>
+                    </p>
+                </div>
+                <h3>Workflow details</h3>
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>Workflow ID</th>
+                        <th>Workflow name</th>
+                        <th>Submitted by</th>
+                        <th>Template</th>
+                        <th>Current fragment ID</th>
+                        <th>Status</th>
+                        <th>
+                            More Info
+                            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                        </th>
+                    </tr>
+                    </thead>
+                    {% for wf in wf_list %}
+                    <tbody>
+                    <tr>
+                        <td>{{ wf.id }}</td>
+                        <td>{{ wf.name }}</td>
+                        <td>{{ wf.owner }}</td>
+                        <td>{{ wf.template_id }}</td>
+                        <td>{{ wf.current_fragment_id }}</td>
+                        <td>{{ wf_state_desc|hash:wf.status}}</td>
+                        <td><a href="#">View progress</a></td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+                <h3>Fragment details</h3>
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>Fragment ID</th>
+                        <th>Fragment Name</th>
+                        <th>Owner</th>
+                        <th>Status</th>
+                        <th>Execution Engine</th>
+                        <th>Current task ID</th>
+                        <th>Info</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    {% for frag in frag_list %}
+                    <tbody>
+                    <tr>
+                        <td>{{ frag.id }}</td>
+                        <td>{{ frag.name }}</td>
+                        <td>{{ frag.owner }}</td>
+                        <td>{{ frag_state_desc|hash:frag.status}}</td>
+                        <td>{{ frag.execution_engine }}</td>
+                        <td>{{ frag.task_id }}</td>
+                        <td>{{ frag.info }}</td>
+                        <td>
+                            {% if frag.name == "get_table" and frag.status != "COMPLETED" %}
+                                <input type="button" name="theButton" id="started-step" value="Upload dataset" class="btn btn-primary" data-wfid="{{ frag.wf_id }}" data-fragid="{{ frag.id }}">
+                            {% endif %}
+                            {% if frag.name == "get_confirmation" and frag.status != "COMPLETED" %}
+                                {% if frag.status != "CREATED" %}
+                                <input type="button" name="theButton" id="profile-step" value="View Profile" class="btn btn-success" data-wfid="{{ frag.wf_id }}" data-userid="{{ frag.owner }}">
+                                {% endif %}
+                            {% endif %}
+                            {% if frag.name == "profile" and frag.status == "COMPLETED" %}
+                                <input type="button" name="theButton" id="profile-step" value="View Profile" class="btn btn-success" data-wfid="{{ frag.wf_id }}" data-userid="{{ frag.owner }}">
+                            {% endif %}
+                        </td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+                <h3>Task details</h3>
+                <table class="table table-striped table-bordered table-hover">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>Task ID</th>
+                        <th>Task Name</th>
+                        <th>Status</th>
+                        <th>File name</th>
+                        <th>File location</th>
+                    </tr>
+                    </thead>
+                    {% for task in task_list %}
+                    <tbody>
+                    <tr>
+                        <td>{{ task.id }}</td>
+                        <td>{{ task.name }}</td>
+                        <td>{{ task_state_desc|hash:task.status}}</td>
+                        <td>{{ task.file_name }}</td>
+                        <td>{{ task.file_loc }}</td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+                {% else %}
+                <p>There are no submitted or completed workflows. Please submit a job.</p>
+                {% endif %}
+                <input type="button" name="cancelButton" id="cancel-step" value="Cancel workflow" class="btn btn-danger">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+      window.setTimeout(function(){ document.location.reload(true); }, 5000);
+
+      $("#profile-step[type='button']").click(function () {
+          var wf_id = $(this).data('wfid');
+          var user_id = $(this).data('userid');
+          if (wf_id) {
+              window.location = '/view_profile?wf_id=' + wf_id + '&user=' + user_id;
+          }
+      });
+
+      $("#started-step[type='button']").click(function () {
+        var wf_id = $(this).data('wfid');
+        var frag_id = $(this).data('fragid');
+        window.location = '/upload_data?wf_id=' + wf_id + '&frag_id=' + frag_id;
+      });
+
+      $("#cancel-step[type='button']").click(function () {
+          var dag_id = document.getElementById('dag_id').innerHTML;
+          var status = "cancel";
+          $.ajax({
+              type: 'GET',
+              url: '/update_dag/',
+              dataType: 'json',
+              data: "dag_id=" + dag_id + "&status=" + status,
+              success: function (e, data) {
+                  console.log(data);
+                  console.log(e['dag_status']);
+                  window.location = '/index/';
+              }
+          })
+      });
+
+  </script>
+{% endblock %}

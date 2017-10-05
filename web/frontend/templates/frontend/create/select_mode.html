@@ -1,0 +1,149 @@
+{% extends 'frontend/base.html' %}
+{% load i18n widget_tweaks %}
+{% block content %}
+
+  <div class="row" style="padding-top: 30px">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Select the mode to use</h3>
+        </div>
+        <div class="panel-body">
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div style="text-align: left">
+                  <div class="col-md-12">
+                    <div class="col-md-5">
+                      <span class="fa fa-user fa-5x fa-border "></span>
+                      <h3>User Mode</h3>
+                    </div>
+                    <div class="col-md-7">
+                      In user mode, we ask user to label the data when we train the model and evaluate blocking rules. This mode allows CloudMatcher to operate on sensitive data where in-house domain experts can label the data themselves.
+                    </div>
+                  </div>
+                  <form action="{% url 'frontend:select-mode' job.id 1 %}" method="post"
+                        enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="well col-md-12">
+                      <div class="col-md-8">
+                        <h5>Number of pairs to label in each iteration of active learning</h5>
+                      </div>
+                      <div class="col-md-4" style="padding: 10px;text-align: center">
+                        {{ user_form.pair_count }}
+                      </div>
+                      <div class="col-md-8">
+                        <h5>Upload column mapping file</h5>
+                      </div>
+                      <div class="col-md-4" style="text-align: center">
+                        <p>{{ user_form.non_field_errors }}</p>
+                        <p>
+                          {{ user_form.docfile.errors }}
+                          <label for="id_docfile">Choose a file</label>
+                          {{ user_form.docfile }}
+                        </p>
+                        <p>
+                        <div id="fileName"></div>
+                        <div id="fileSize"></div>
+                        <div id="fileType"></div>
+                        </p>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Select User Mode</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div style="text-align: left">
+                  <div class="col-md-12">
+                    <div class="col-md-5">
+                      <span class="fa fa-users fa-5x fa-border "></span>
+                      <h3>Crowd Mode</h3>
+                    </div>
+                    <div class="col-md-7">
+                      In crowd mode, we crowd source the pairs to get label for training our model. CloudMatcher uses Amazon Mechanical Turk for crowd sourcing.
+{#                      TODO Placeholder for desc#}
+                    </div>
+                  </div>
+                  <form action="{% url 'frontend:select-mode' job.id 2 %}" method="post"
+                        enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="well col-md-12">
+                      {% for field in crowd_form %}
+                        {% if field.name != 'docfile' and field.name != 'pair_count' %}
+                          {% if field.errors %}
+                            <div class="form-group col-md-12 has-error">
+                              <label class="col-md-8 control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+                              <div class="col-nd-4">
+                                {{ field|attr:"class:form-control" }}
+                                <span class="help-block">
+                                    {% for error in  field.errors %}{{ error }}{% endfor %}
+                                </span>
+                              </div>
+                            </div>
+                          {% else %}
+                            <div class="form-group col-md-12">
+                              <div class="control-label" for="id_{{ field.name }}">
+                                <h5>
+                                  {{ field.label }}
+                                </h5>
+                              </div>
+                              <div class="input-group">
+                                {% if field.name == 'reward_amount' %}
+                                  <span class="input-group-addon">
+                                    <i class='glyphicon glyphicon-usd'></i>
+                                  </span>
+                                {%  endif %}
+                                {{ field }}
+                                <span class="input-group-addon">
+                                  <a class='my-tool-tip' data-toggle="tooltip" data-placement="left" title="{{ field.help_text }}">
+                                    <i class='glyphicon glyphicon-info-sign'></i>
+                                  </a>
+                                </span>
+                              </div>
+                            </div>
+                          {% endif %}
+                        {% endif %}
+                      {% endfor %}
+                      <div class="col-md-12">
+                        <div class="col-md-8">
+                          <h5>Number of pairs to label during each iteration of crowdsourcing (active learning)</h5>
+                        </div>
+                        <div class="col-md-4" style="padding: 10px; text-align: center">
+                          {{ crowd_form.pair_count }}
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="col-md-8">
+                          <h5>Upload column mapping file</h5>
+                        </div>
+                        <div class="col-md-4">
+                          <p>{{ crowd_form.non_field_errors }}</p>
+                          <p>
+                            {{ crowd_form.docfile.errors }}
+                            <label for="id_docfile">Choose a file</label>
+                            {{ crowd_form.docfile }}
+                          </p>
+                          <p>
+                            <div id="fileName"></div>
+                            <div id="fileSize"></div>
+                            <div id="fileType"></div>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Select Crowd Mode</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'frontend/base.html' %}
+{% load bootstrap3 %}
+
+{% block title %}Please provide a question for crowdsourcing{% endblock %}
+{% block content %}
+
+{# Display a form #}
+<form action="{% url 'frontend:question_needed' job.id %}" method="post" class="form">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% buttons submit='OK'%}{% endbuttons %}
+</form>
+{# Read the documentation for more information #}
+{% endblock %}

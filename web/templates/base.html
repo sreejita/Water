@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>WATER QUALITY DATA</title>
+		<style>
+			table, th, td {
+
+			    border: 1px solid black;
+
+			}
+		</style>
+		<script>
+			var url = window.location.href;
+			function submit() {
+				var lake_id = document.getElementById('lake_id');
+				window.location.replace(url+'site/'+lake_id.value);
+
+			}
+		</script> 
+	</head>
+	<body>
+		{% block content %}
+		{% endblock content %}
+		
+	</body>
+</html>

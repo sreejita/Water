@@ -1,0 +1,98 @@
+.center-align {
+    text-align: center;
+}
+dt, dd {  margin-top: 5px; }
+
+.panel_body {
+    height:100%;
+    width: 100%;
+}
+
+.mydiv {
+    overflow: scroll;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.cell-margin {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+label[for='id_docfile'] {
+    width: 100px;
+    background: #337ab7;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 12px;
+    text-align: center;
+    color: #FFF;
+    cursor: pointer;
+}
+input[type='file'] {
+    display: block;
+}
+.well {
+    background: rgba(0, 0, 0, 0.05);
+}
+.train-success.btn.btn-default.active{
+    background: green;
+    color: white;
+}
+.train-danger.btn.btn-default.active {
+    background: red;
+    color: white;
+}
+.train-info.btn.btn-default.active {
+    background: #337ab7;
+    color: white;
+}
+.train-desc {
+    padding: 10px;
+    background: cyan;
+}
+a.my-tool-tip, a.my-tool-tip:hover, a.my-tool-tip:visited {
+    color: black;
+}
+
+.fragment {
+    font-size: 12px;
+    font-family: tahoma;
+    height: 140px;
+    border: 1px solid #ccc;
+    color: #555;
+    display: block;
+    padding: 10px;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+.fragment:hover {
+    box-shadow: 2px 2px 5px rgba(0,0,0,.2);
+
+}
+
+.fragment img {
+    float: left;
+    margin-right: 10px;
+}
+
+
+.fragment h3 {
+    padding: 0;
+    margin: 0;
+    color: #369;
+}
+.fragment h4 {
+    padding: 0;
+    margin: 0;
+    color: #000;
+}
+#close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+}

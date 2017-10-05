@@ -1,0 +1,78 @@
+{% extends 'frontend/base.html' %}
+{% load i18n widget_tweaks %}
+{% load bootstrap3 %}
+{% block content %}
+  <div class="row" style="padding-top: 30px">
+    <div class="col-md-12">
+      <div class="panel panel-default ">
+        <div class="panel-heading">
+          <div class="panel-title pull-left">
+             <h4>{{ panel_label }}</h4>
+              <div>Do these pairs refer to the same real world entity?</div>
+          </div>
+          <div class="panel-title pull-right">
+            <table style="margin-right: 50px">
+              <tr>
+                <td style="padding: 5px;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>
+                <td style="padding: 5px;">Yes</td>
+                <td style="padding: 5px;">{{ true_label_count }}</td>
+              </tr>
+              <tr>
+                <td style="padding: 5px;"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>
+                <td style="padding: 5px;">No</td>
+                <td style="padding: 5px;">{{ false_label_count }}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="panel-body panel_body">
+          <form action="{% url next_url job.id %}" method="post"
+                enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mydiv">
+              <table class="table table-striped table-bordered table-hover">
+                <thead class="thead-inverse">
+                <tr>
+                  {% for column in headers.0 %}
+                    <th style="text-align: center;">{{ column }}</th>
+                  {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for field in form %}
+                  {% with forloop.counter|cut:" " as index %}
+                    <tr>
+                      {% for row in rows.0|slice:index|last %}
+                        <td>{{ row }}</td>
+                      {% endfor %}
+                    </tr>
+                    <tr>
+                      {% for row in rows.1|slice:index|last %}
+                        <td>{{ row }}</td>
+                      {% endfor %}
+                    </tr>
+                    <tr>
+                      <td style="vertical-align: middle; text-align: right;" colspan="{{ colCount }}">
+                        <div style="text-align: right;">{{ field }} {{ field.errors }}</div>
+                      </td>
+                    </tr>
+                  {% endwith %}
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <a href="{% url 'frontend:index' %}" class="btn btn-default">Home</a>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        <br/>
+          <div class="col-md-12">
+            <div class="train-desc">
+              CloudMatch uses these labels to train the model and understand the underlying data. The more training you provide, the faster we learn classifier and the better results will be.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

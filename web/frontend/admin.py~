@@ -1,0 +1,18 @@
+from django.contrib import admin
+
+# Register your models here.
+
+
+from .models import Job
+
+# YG Adding Dag and Task models here to be displayed on admin page
+from .models import Workflow
+from .models import Fragment
+from .models import Task
+
+admin.site.register(Job)
+
+# YG Registering Dag and Task models to the admin site
+admin.site.register(Workflow)
+admin.site.register(Fragment)
+admin.site.register(Task)

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<a href="{% url 'index' %}">
+		Back to list of lakes
+	</a>
+	<h4>nhd_lake_id:</h4>
+	<p>{{ lake.nhd_lake_id }}</p>
+	<h4>gnis_name:</h4>
+	<p>{{ lake.gnis_name }}</p>
+	<h4>gnis_id:</h4>
+	<p>{{ lake.gnis_id }}</p>
+	<h4>area(sq. km):</h4>
+	<p>{{ lake.area_sqkm }}</p>
+	<h4>elevation(feet):</h4>
+	<p>{{ lake.elevation_feet }}</p>
+	<h4>ftype:</h4>
+	<p>{{ lake.ftype }}</p>
+	<h4>fcode:</h4>
+	<p>{{ lake.fcode }}</p>
+	<h4>fdate:</h4>
+	<p>{{ lake.fdate }}</p>
+	<h4>shape_leng(decimaldegrees):</h4>
+	<p>{{ lake.shape_leng_decimaldegrees }}</p>
+	<h4>shape_area(sq. decimaldegrees):</h4>
+	<p>{{ lake.shape_area_sqdecimaldegrees }}</p>
+
+{% endblock content %} 

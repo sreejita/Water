@@ -1,0 +1,14 @@
+{% extends 'frontend/base.html' %}
+{% load bootstrap3 %}
+
+{% block title %}Select at least two matching pairs (specifically click on Yes to mark a pair as match){% endblock %}
+
+{% block content %}
+<form action="{% url 'frontend:label_pos_examples' job.id %}" method="post" class="form">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% buttons submit='OK'%}{% endbuttons %}
+</form>
+
+{# Read the documentation for more information #}
+{% endblock %}

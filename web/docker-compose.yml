@@ -1,0 +1,33 @@
+version: '2'
+services:
+  db:
+    image: postgres
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8100:8000"
+    depends_on:
+      - db
+    links:
+      - rabbitmq
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: "rmq"
+    ports:
+    - "15672:15672"
+  celery:
+    build: .
+    environment:
+      - C_FORCE_ROOT=true
+      - DATABASE_HOST=db
+      - BROKER_URL=amqp://guest:guest@rabbitmq//
+    working_dir: /code
+    command: bash -c "sleep 3 && celery -A cloudmatch worker -E -l info --concurrency=3 "
+    volumes:
+      - .:/code
+    links:
+    - db
+    - rabbitmq

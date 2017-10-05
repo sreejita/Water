@@ -1,0 +1,40 @@
+{% extends 'frontend/base.html' %}
+{% load bootstrap3 %}
+
+{% block title %}Create additional negative matches {% endblock %}
+{% block content %}
+
+{# Display a form #}
+<form action="{% url 'frontend:add_label_neg_examples' job.id %}" method="post" class="form">
+  {% csrf_token %}
+  <Table>
+  <tr>
+  {% for pairA in form.firstPairA %}
+  <td>{% bootstrap_field pairA %}</td>
+  {% endfor %} 
+  </tr>
+  <tr>
+  {% for pairB in form.firstPairB %}
+  <td>{% bootstrap_field pairB show_label=False %}</td>
+  {% endfor %} 
+  </tr>
+  </table>
+
+  {% if form.hasSecondPair %}
+  <Table>
+  <tr>
+  {% for pairA in form.secondPairA %}
+  <td>{% bootstrap_field pairA %}</td>
+  {% endfor %} 
+  </tr>
+  <tr>
+  {% for pairB in form.secondPairB %}
+  <td>{% bootstrap_field pairB show_label=False %}</td>
+  {% endfor %} 
+  </tr>
+  </table>
+  {% endif %}
+  {% buttons submit='OK'%}{% endbuttons %}
+</form>
+{# Read the documentation for more information #}
+{% endblock %}

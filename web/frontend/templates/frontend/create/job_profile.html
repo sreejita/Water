@@ -1,0 +1,59 @@
+{% extends 'frontend/base.html' %}
+{% load i18n widget_tweaks %}
+{% load bootstrap3 %}
+{% block content %}
+    <div class="row" style="padding-top: 30px">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Job profile - CloudMatcher results</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="card">
+                      <h3 class="card-header">Job information</h3>
+                      <div class="card-block">
+                        <dl class="dl-horizontal">
+                          <dt></dt><dd></dd>
+                          <dt>Job ID</dt>
+                          <dd>{{ job.id }}</dd>
+                          <dt>Job name</dt>
+                          <dd>{{ job.name }}</dd>
+                          <dt>Owner</dt>
+                          <dd>{{ job.owner.username }}</dd>
+                          <dt>Contact email</dt>
+                          <dd>{{ job.email }}</dd>
+                          <dt>File A</dt>
+                          <dd>{{ job.fileA.name }}</dd>
+                          <dt>File B</dt>
+                          <dd>{{ job.fileB.name }}</dd>
+                          <dt>File A statistics</dt><dd></dd>
+                          <dd> <b>Schema :</b>
+                            {% for header in job.headerA %}
+                              {{ header }},
+                            {% endfor %}
+                          </dd>
+                          <dd>
+                              <b>Tuples :</b> {{ nrecs1 }}
+                          </dd>
+                          <dt>File B statistics</dt><dd></dd>
+                          <dd> <b>Schema :</b>
+                            {% for header in job.headerB %}
+                              {{ header }},
+                            {% endfor %}
+                          </dd>
+                          <dd>
+                              <b>Tuples :</b> {{ nrecs2 }}
+                          </dd>
+                          <dt>Job State</dt>
+                          <dd>{{ job.jobstate }}</dd>
+                        </dl>
+                        <a href="{% url 'frontend:index' %}" class="btn btn-success">Refresh</a>
+                        <a href="{% url 'frontend:index' %}" class="btn btn-primary">Back</a>
+			<a href="{% url 'frontend:index' %}" class="btn btn-primary">Download predicted matches</a>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

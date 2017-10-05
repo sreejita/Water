@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block title %}Login{% endblock %}
+
+
+{% block content %}
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
+{% if user.is_authenticated %}
+	<p>Welcome, {{ user.username }}</p>
+
+{% else %}
+	<form method="post" action="{% url 'frontend:login' %}">
+	{% csrf_token %}
+
+	{% bootstrap_form form %}
+	{% buttons %}
+	<input type="submit" value="Login" />
+	<input type="hidden" name="next" value="{{ next }}" />
+	{% endbuttons %}
+
+	</form>
+
+	{# Assumes you setup the password_reset view in your URLconf #}
+</p>
+	{% endif %}
+
+{% endblock %}

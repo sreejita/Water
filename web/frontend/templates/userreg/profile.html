@@ -1,0 +1,16 @@
+{% extends 'base_home.html' %}
+
+
+{% load bootstrap3 %}
+
+{% block title %}Login{% endblock %}
+
+
+{% block content %}
+{% if user.is_authenticated %}
+	<p>Welcome, {{ user.username }}</p>
+	<p>This is your profile.</p>
+	<p>Also your dashboard.</p>
+
+{% endif %}
+{% endblock %}
