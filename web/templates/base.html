@@ -1,25 +1,13 @@
+{% load staticfiles %}
+
 <html>
 	<head>
 		<title>WATER QUALITY DATA</title>
-		<style>
-			table, th, td {
-
-			    border: 1px solid black;
-
-			}
-		</style>
-		<script>
-			var url = window.location.href;
-			function submit() {
-				var lake_id = document.getElementById('lake_id');
-				window.location.replace(url+'site/'+lake_id.value);
-
-			}
-		</script> 
+		<link rel="stylesheet" href="{% static 'main.css' %}">
 	</head>
 	<body>
 		{% block content %}
 		{% endblock content %}
-		
+		<script src="{% static 'main.js' %}"></script>
 	</body>
 </html>

@@ -1,0 +1,18 @@
+body {
+    margin-top: 50px;
+    margin-left: 250px;
+}
+
+#lake_submit {
+	margin-top: 20px;
+}
+
+#heading {
+	margin-top: 50px;
+}
+
+table, th, td {
+
+			    border: 1px solid black;
+
+			}
