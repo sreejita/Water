@@ -2,12 +2,58 @@
 
 <html>
 	<head>
-		<title>WATER QUALITY DATA</title>
-		<link rel="stylesheet" href="{% static 'main.css' %}">
+		<!-- Required meta tags -->
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	    <title>WATER QUALITY DATA</title>
+	    <!-- Bootstrap CSS -->
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css">
+  		<link rel="stylesheet" href="{% static 'album.css' %}">
+  		<link rel="stylesheet" href="{% static 'form-elements.css' %}">
+  		 
+		<!--link rel="stylesheet" href="{% static 'main.css' %}"-->
+
 	</head>
 	<body>
-		{% block content %}
-		{% endblock content %}
-		<script src="{% static 'main.js' %}"></script>
+		<div class="collapse bg-dark" id="navbarHeader">
+	      <div class="container">
+	        <div class="row">
+	          <div class="col-sm-8 py-4">
+	            <h4 class="text-white">About</h4>
+	            <p class="text-muted">Add some information ....</p>
+	          </div>
+	          <div class="col-sm-4 py-4">
+	            <!--h4 class="text-white">Contact</h4-->
+	            <ul class="list-unstyled">
+	              <!--li><a href="#" class="text-white">Follow on Twitter</a></li-->
+	              <li><a href="#" class="text-white">Github</a></li>
+	              <li><a href="#" class="text-white">Email</a></li>
+	            </ul>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="navbar navbar-dark bg-dark">
+	      <div class="container d-flex justify-content-between">
+	        <a href="{% url 'index' %}" class="navbar-brand">Madwater</a>
+	        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+	          <span class="navbar-toggler-icon"></span>
+	        </button>
+	      </div>
+	    </div>
+	    <div class="album">
+     		<div class="container">
+     			
+					{% block content %}
+					{% endblock content %}
+     		
+     		</div>
+     	</div>
+
+		 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+		 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+  
 	</body>
 </html>

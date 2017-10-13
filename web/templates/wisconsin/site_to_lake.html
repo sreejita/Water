@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<a href="{% url 'index' %}">
+		Back to Home
+	</a>
+	{% if lakes %}
+		<h3 id="heading">Lake for site id : {{ site_id }}
+		</h3>
+		<!--h3>Lake Name : {{ lake_name }}
+		</h3-->
+		<table>
+			<tr>
+				<th>Lake ID</th>
+				<th>Lake Name</th>
+				<th>Monitoring Location</th>
+				<th>Inside Lake</th>
+				<th>Distance to Shore (in m)</th>
+			</tr>
+
+		{% for l in lakes %}
+			<tr>
+				<td>{{ l.nhd_lake_id }}</td>
+				<td>{{ l.gnis_lake_name }}</td>
+				<td>{{ l.monitoringlocationname }}</td>
+				<td>{{ l.isinsidelake }}</td>
+				<td>{{ l.disttoshore_m }}</td>
+			</tr>
+		{% endfor %}
+		
+	{% else %}
+		<h3>No data found for site id : {{ site_id }}
+		</h3>
+		
+	{% endif %}
+
+{% endblock content %} 

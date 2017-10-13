@@ -1,9 +1,61 @@
 {% extends "base.html" %}
 
 {% block content %}
-	
-		<h3>Enter lake id: </h3><br>
-		<input type ="text" name= "lake_id" id= "lake_id"> <br>
-		<button type = "submit" value ="Submit" name="lake_submit" id="lake_submit" onclick="submit();">Submit</button>
+	<div class="row">
+		<div class="col-md-5">
+			<div class="form-box">
+                <div class="form-top">
+                    <div class="form-top-left">
+                    	<h3>Lake to Site </h3>
+                    </div>
+                </div>
+                <div class="form-top">
+                	<form action="/lake_to_site/" method="POST">	
+                		<div class="form-group">
+				    		{{ form.as_p }}
+				    	</div>
+				    	{% csrf_token %}
+			  			<button type="submit" class="btn" style="font-size: large">Submit</button>
+				    </form> 
+                </div>
+            </div>
+		</div>
+		<div class="col-md-1 middle-border"></div>
+        <div class="col-md-1"></div>
+	    <br>
+	    <br>
+	    <div class="col-md-5">
+			<div class="form-box">
+                <div class="form-top">
+                    <div class="form-top-left">
+                    	<h3>Site to Lake </h3>
+                    </div>
+                </div>
+                <div class="form-top">
+                	<form action="/site_to_lake/" method="POST">	
+				    	{{ forms2l.as_p }}
+				    	{% csrf_token %}
+			  			<button type="submit" class="btn" style="font-size: large">Submit</button>
+				    </form> 
+                </div>
+            </div>
+		</div>
+	</div>
+	    <!--div class="col-md-5">
+		    <h3>Site to Lake: </h3>
+		    <form action="/site_to_lake/" method="POST">	
+		    	{{ forms2l.as_p }}
+		    	{% csrf_token %}
+	  			<input type="submit" value="Submit">
+		    </form> 
+		</div-->
+
+			<!--input type ="text" name= "lake_id" id= "lake_id"> <br>
+			<button type = "submit" value ="Submit" name="lake_submit" id="lake_submit" onclick="submit();">Submit</button-->
+
+		    
+		
+
+
 
 {% endblock content %} 
