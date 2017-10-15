@@ -41,6 +41,64 @@
             </div>
 		</div>
 	</div>
+	<hr>
+	<div class="row">
+		<div class="col-md-5">
+			<div class="form-box" style="padding-bottom: 30px;">
+                <div class="form-top">
+                    <div class="form-top-left">
+                    	<h3>Query Waterbodies </h3>
+                    </div>
+                </div>
+                <div class="form-top">
+                	<form action="/waterbodies/" method="POST">	
+                		{{ form_waterbodies.non_field_errors }}
+                		<div class="form-group">
+					        {{ form_waterbodies.query_options.errors }}
+					        <label for="id_query_options">Query using:</label>
+					        {{ form_waterbodies.query_options }}
+						    
+				    	</div>
+				    	<div class="form-group" id="lake_id_tb">
+					        {{ form_waterbodies.lake_id.errors }}
+					        <label class="sr-only" for="id_lake_id">Lake ID:</label>
+					        {{ form_waterbodies.lake_id }}
+						    
+				    	</div>
+				    	<div class="form-group"  id="lake_name_tb">
+					        {{ form_waterbodies.lake_name.errors }}
+					        <label class="sr-only" for="id_lake_name">Lake Name:</label>
+					        {{ form_waterbodies.lake_name }}
+						    
+				    	</div>
+				    	<div class="form-group"  id="area_tb">
+					        {{ form_waterbodies.area_cmp.errors }}
+					        {{ form_waterbodies.area.errors }}
+					        <div class="input-group">
+					        	<span class="input-group-addon" style="padding: 0px;">
+						        <label class="sr-only" for="id_area_cmp">Query using:</label>
+						        {{ form_waterbodies.area_cmp }}
+						        </span>
+						        <label class="sr-only" for="id_area">Area:</label>
+						        {{ form_waterbodies.area }}
+					        </div>
+						    
+				    	</div>
+				    	{% csrf_token %}
+			  			<button type="submit" class="btn" style="font-size: large">Submit</button>
+				    </form> 
+                </div>
+            </div>
+		</div>
+		<div class="col-md-1 middle-border"></div>
+        <div class="col-md-1"></div>
+	    <br>
+	    <br>
+	    <div class="col-md-5">
+	    </div>	
+	</div>
+	<hr>
+	
 	    <!--div class="col-md-5">
 		    <h3>Site to Lake: </h3>
 		    <form action="/site_to_lake/" method="POST">	

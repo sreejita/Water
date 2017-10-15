@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<!--
 	<a href="{% url 'index' %}">
 		Back to Home
 	</a>
 	{% if lakes %}
 		<h3 id="heading">Lake for site id : {{ site_id }}
 		</h3>
-		<!--h3>Lake Name : {{ lake_name }}
-		</h3-->
+		
 		<table>
 			<tr>
 				<th>Lake ID</th>
@@ -33,5 +33,60 @@
 		</h3>
 		
 	{% endif %}
+	 start -->
+	<div class="grey-wrapper">
+		{% if lakes %}
+			<div class="row">
+				<div class="col-md-12">
+					<h3 id="heading">Lakes
+					</h3>
+				</div>
+			</div>
+			<div class="row top-buffer">
+				<div class="col-md-12 top-buffer">
+					<h6>Site ID : {{ site_id }}
+					</h6>
+				</div>
+			</div>
+			<div class="row top-buffer">
+			
+				<div class="col-md-12">
+					<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
+						<thead>
+							<tr class="bootstrap-blue-bg">
+								<th>Lake ID</th>
+								<th>Lake Name</th>
+								<th>Monitoring Location</th>
+								<th>Inside Lake</th>
+								<th>Distance to Shore (in m)</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							{% for l in lakes %}
+								<tr>
+									<td>{{ l.nhd_lake_id }}</td>
+									<td>{{ l.gnis_lake_name }}</td>
+									<td>{{ l.monitoringlocationname }}</td>
+									<td>{{ l.isinsidelake }}</td>
+									<td>{{ l.disttoshore_m }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+						
+					</table>
+				</div>
+			</div>
+		{% else %}
+			<div class="row">
+
+				<div class="col-md-12">
+					<h4>No data found for site id : {{ site_id }}
+					</h4>
+				</div>>
+			</div>
+			
+		{% endif %}
+	</div>
 
 {% endblock content %} 

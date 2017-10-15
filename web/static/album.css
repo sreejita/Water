@@ -33,6 +33,23 @@ body {
 
 .top-buffer { margin-top:20px; }
 
+.grey-wrapper {
+  background-color: #f3f3f3;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+}
+
+.addon-select {
+  border:none;
+  background-color:#e9ecef;
+}
+
+.bootstrap-blue-bg {
+  background-color: #337ab7;
+  color: #ffffff;
+}
 .form-box {
   margin-top: 50px;
 }
