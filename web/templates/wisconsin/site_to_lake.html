@@ -69,7 +69,7 @@
 									<td>{{ l.gnis_lake_name }}</td>
 									<td>{{ l.monitoringlocationname }}</td>
 									<td>{{ l.isinsidelake }}</td>
-									<td>{{ l.disttoshore_m }}</td>
+									<td>{{ l.disttoshore_m | floatformat:5 }}</td>
 								</tr>
 							{% endfor %}
 						</tbody>

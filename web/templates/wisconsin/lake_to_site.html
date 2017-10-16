@@ -40,7 +40,7 @@
 									<td>{{ s.site_id }}</td>
 									<td>{{ s.monitoringlocationname }}</td>
 									<td>{{ s.isinsidelake }}</td>
-									<td>{{ s.disttoshore_m }}</td>
+									<td>{{ s.disttoshore_m | floatformat:5 }}</td>
 								</tr>
 							{% endfor %}
 						</tbody>

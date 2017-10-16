@@ -33,11 +33,11 @@
 								<tr>
 									<td>{{ l.nhd_lake_id }}</td>
 									<td>{{ l.gnis_name }}</td>
-									<td>{{ l.gnis_id }}</td>
-									<td>{{ l.area_sqkm }}</td>
+									<td>{{ l.gnis_id | floatformat:0 }}</td>
+									<td>{{ l.area_sqkm | floatformat:5 }}</td>
 									<td>{{ l.elevation_feet }}</td>
-									<td>{{ l.shape_leng_decimaldegrees }}</td>
-									<td>{{ l.shape_area_sqdecimaldegrees }}</td>
+									<td>{{ l.shape_leng_decimaldegrees | floatformat:5 }}</td>
+									<td>{{ l.shape_area_sqdecimaldegrees | floatformat:5 }}</td>
 								</tr>
 							{% endfor %}
 						</tbody>
