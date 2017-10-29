@@ -1,28 +1,104 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<a href="{% url 'index' %}">
-		Back to list of lakes
-	</a>
-	<h4>nhd_lake_id:</h4>
-	<p>{{ lake.nhd_lake_id }}</p>
-	<h4>gnis_name:</h4>
-	<p>{{ lake.gnis_name }}</p>
-	<h4>gnis_id:</h4>
-	<p>{{ lake.gnis_id }}</p>
-	<h4>area(sq. km):</h4>
-	<p>{{ lake.area_sqkm }}</p>
-	<h4>elevation(feet):</h4>
-	<p>{{ lake.elevation_feet }}</p>
-	<h4>ftype:</h4>
-	<p>{{ lake.ftype }}</p>
-	<h4>fcode:</h4>
-	<p>{{ lake.fcode }}</p>
-	<h4>fdate:</h4>
-	<p>{{ lake.fdate }}</p>
-	<h4>shape_leng(decimaldegrees):</h4>
-	<p>{{ lake.shape_leng_decimaldegrees }}</p>
-	<h4>shape_area(sq. decimaldegrees):</h4>
-	<p>{{ lake.shape_area_sqdecimaldegrees }}</p>
+
+	<div class="grey-wrapper">
+		{% if lakes %}
+			<div class="row">
+				<div class="col-md-12">
+					<h3 id="heading">Lake Details
+					</h3>
+				</div>
+			</div>
+			<div class="row top-buffer">
+			
+				<div class="col-md-12">
+					<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
+						<!--thead>
+							<tr class="bootstrap-blue-bg">
+								<th>Metric</th>
+								<th>Org Name</th>
+								<th>Org Id</th>
+								<th>HUC</th>
+								<th>Monitoring Location</th>
+								<th>Location Type</th>
+								<th>Location Description</th>
+							</tr>
+							gnis_id = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    area_sqkm = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    elevation_feet = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    ftype = models.IntegerField(blank=True, null=True)
+    fcode = models.IntegerField(blank=True, null=True)
+    fdate = models.DateField(blank=True, null=True)
+    shape_leng_decimaldegrees = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_area_sqdecimaldegrees = models.DecimalField(max_digits=655
+    Lake Name</th>
+								<th>Gnis Id</th>
+								<th>Area(in sq. km.)</th>
+								<th>Elevation(in ft.)</th>
+						</thead-->
+						
+						<tbody>
+							{% for l in lakes %}
+								<tr>
+									<td>Lake ID</td>
+									<td>{{ l.nhd_lake_id }}</td>
+								</tr>
+								<tr>
+									<td>Lake Name</td>
+									<td>{{ l.gnis_name }}</td>
+								</tr>
+								<tr>
+									<td>Gnis Id</td>
+									<td>{{ l.gnis_id }}</td>
+								</tr>
+								<tr>
+									<td>Area(in sq. km.)</td>
+									<td>{{ l.area_sqkm }}</td>
+								</tr>
+								<tr>
+									<td>Elevation(in ft.)</td>
+									<td>{{ l.elevation_feet }}</td>
+								</tr>
+								<tr>
+									<td>FType</td>
+									<td>{{ l.ftype }}</td>
+								</tr>
+								<tr>
+									<td>Fcode</td>
+									<td>{{ l.fcode }}</td>
+								</tr>
+								<tr>
+									<td>FDate</td>
+									<td>{{ l.fdate }}</td>
+								</tr>
+								
+								<tr>
+									<td>Shape Length(in decimal degrees)</td>
+									<td>{{ l.shape_leng_decimaldegrees }}</td>
+								</tr>
+								
+								<tr>
+									<td>Shape Area(in sq. decimal degrees)</td>
+									<td>{{ l.shape_area_sqdecimaldegrees }}</td>
+								</tr>
+								
+								
+							{% endfor %}
+						</tbody>
+						
+					</table>
+				</div>
+			</div>
+		{% else %}
+			<div class="row">
+
+				<div class="col-md-12">
+					<h4>No data found</h4>
+				</div>
+			</div>
+			
+		{% endif %}
+	</div>
 
 {% endblock content %} 

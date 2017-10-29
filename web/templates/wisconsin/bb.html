@@ -5,10 +5,10 @@
 		Back to Home
 	</a-->
 	<div class="grey-wrapper">
-		{% if lakes %}
+		{% if bbs %}
 			<div class="row">
 				<div class="col-md-12">
-					<h3 id="heading">Lakes
+					<h3 id="heading">Bounding Boxes
 					</h3>
 				</div>
 			</div>
@@ -18,26 +18,22 @@
 					<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
 						<thead>
 							<tr class="bootstrap-blue-bg">
-								<th>Lake ID</th>
-								<th>Lake Name</th>
-								<th>Gnis Id</th>
-								<th>Area(in sq. km.)</th>
-								<th>Elevation(in ft.)</th>
-								<th>Shape Length(in decimal deg.)</th>
-								<th>Shape Area(in sq. decimal deg.)</th>
+								<th>Bounding Box ID</th>
+								<th>North</th>
+								<th>South</th>
+								<th>East</th>
+								<th>West</th>
 							</tr>
 						</thead>
 						
 						<tbody>
-							{% for l in lakes %}
+							{% for b in bbs %}
 								<tr>
-									<td><a href="{% url 'lake_detail' l.nhd_lake_id %}">{{ l.nhd_lake_id }}</a></td>
-									<td>{{ l.gnis_name }}</td>
-									<td>{{ l.gnis_id | floatformat:0 }}</td>
-									<td>{{ l.area_sqkm | floatformat:5 }}</td>
-									<td>{{ l.elevation_feet }}</td>
-									<td>{{ l.shape_leng_decimaldegrees | floatformat:5 }}</td>
-									<td>{{ l.shape_area_sqdecimaldegrees | floatformat:5 }}</td>
+									<td><a href="{% url 'bb_detail' b.bb_id %}">{{ b.bb_id }}</a></td>
+									<td>{{ b.north | floatformat:5 }}</td>
+									<td>{{ b.south | floatformat:5 }}</td>
+									<td>{{ b.east | floatformat:5 }}</td>
+									<td>{{ b.west | floatformat:5 }}</td>
 								</tr>
 							{% endfor %}
 						</tbody>

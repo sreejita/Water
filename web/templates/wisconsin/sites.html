@@ -5,10 +5,10 @@
 		Back to Home
 	</a-->
 	<div class="grey-wrapper">
-		{% if lakes %}
+		{% if sites %}
 			<div class="row">
 				<div class="col-md-12">
-					<h3 id="heading">Lakes
+					<h3 id="heading">Sites
 					</h3>
 				</div>
 			</div>
@@ -18,26 +18,26 @@
 					<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
 						<thead>
 							<tr class="bootstrap-blue-bg">
-								<th>Lake ID</th>
-								<th>Lake Name</th>
-								<th>Gnis Id</th>
-								<th>Area(in sq. km.)</th>
-								<th>Elevation(in ft.)</th>
-								<th>Shape Length(in decimal deg.)</th>
-								<th>Shape Area(in sq. decimal deg.)</th>
+								<th>Site ID</th>
+								<th>Org Name</th>
+								<th>Org Id</th>
+								<th>HUC</th>
+								<th>Monitoring Location</th>
+								<th>Location Type</th>
+								<th>Location Description</th>
 							</tr>
 						</thead>
 						
 						<tbody>
-							{% for l in lakes %}
+							{% for s in sites %}
 								<tr>
-									<td><a href="{% url 'lake_detail' l.nhd_lake_id %}">{{ l.nhd_lake_id }}</a></td>
-									<td>{{ l.gnis_name }}</td>
-									<td>{{ l.gnis_id | floatformat:0 }}</td>
-									<td>{{ l.area_sqkm | floatformat:5 }}</td>
-									<td>{{ l.elevation_feet }}</td>
-									<td>{{ l.shape_leng_decimaldegrees | floatformat:5 }}</td>
-									<td>{{ l.shape_area_sqdecimaldegrees | floatformat:5 }}</td>
+									<td><a href="{% url 'site_detail' s.site_id %}">{{ s.site_id }}</a></td>
+									<td>{{ s.organizationformalname }}</td>
+									<td>{{ s.organizationidentifier }}</td>
+									<td>{{ s.huceightdigitcode | floatformat:0 }}</td>
+									<td>{{ s.monitoringlocationname }}</td>
+									<td>{{ s.monitoringlocationtypename }}</td>
+									<td>{{ s.monitoringlocationdescriptiontext }}</td>
 								</tr>
 							{% endfor %}
 						</tbody>

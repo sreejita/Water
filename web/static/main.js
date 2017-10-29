@@ -3,9 +3,8 @@ console.log("HELLOOO");
 				console.log( "ready!" );
 				//$('#lake_id_tb').hide();
 				$('[data-toggle="tooltip"]').tooltip();  
-				$('#lake_name_tb').hide(); 
-				$('#area_tb').hide(); 
-				$('#waterbodies-dropdown').change(function(){
+				
+				/*$('#waterbodies-dropdown').change(function(){
 			        if($('#waterbodies-dropdown').val() == 'lake_id') {
 			            $('#lake_id_tb').show(); 
 			            $('#lake_name_tb').hide(); 
@@ -19,5 +18,5 @@ console.log("HELLOOO");
 			        	$('#lake_id_tb').hide(); 
 			        	$('#lake_name_tb').hide();
 			        }
-			    });
+			    }); */
 			});

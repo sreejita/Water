@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div class="grey-wrapper">
+		
+			<div class="row">
+				<div class="col-md-12">
+					<h3 id="heading">Bounding box Details for {{ bb_id }}
+					</h3>
+				</div>
+			</div>
+			{% if lake %}
+				<div class="row top-buffer">
+					<div class="col-md-12 top-buffer">
+						{% for l in lake %}
+							<h6>Lake ID : <a href="{% url 'lake_detail' l.nhd_lake_id %}">{{ l.nhd_lake_id }}</a>
+							</h6>
+						
+							<h6>Lake Name : {{ l.gnis_name }}
+							</h6>
+						{% endfor %}
+					</div>
+				</div>
+			{% else %}
+				<div class="row">
+
+					<div class="col-md-12">
+						<h4>No lake data found</h4>
+					</div>
+				</div>
+				
+			{% endif %}
+
+			{% if sites %}
+				<div class="row top-buffer">
+					<div class="col-md-12 top-buffer">
+						
+					<h6>Sites :
+					</h6>
+						
+						
+					</div>
+				</div>
+				<div class="row top-buffer">
+			
+					<div class="col-md-12">
+						<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
+							<thead>
+								<tr class="bootstrap-blue-bg">
+									<th>Site ID</th>
+									<th>Org Name</th>
+									<th>Org Id</th>
+									<th>HUC</th>
+									<th>Monitoring Location</th>
+									<th>Location Type</th>
+									<th>Location Description</th>
+								</tr>
+							</thead>
+							
+							<tbody>
+								{% for s in sites %}
+									<tr>
+										<td><a href="{% url 'site_detail' s.site_id %}">{{ s.site_id }}</a></td>
+										<td>{{ s.organizationformalname }}</td>
+										<td>{{ s.organizationidentifier }}</td>
+										<td>{{ s.huceightdigitcode | floatformat:0 }}</td>
+										<td>{{ s.monitoringlocationname }}</td>
+										<td>{{ s.monitoringlocationtypename }}</td>
+										<td>{{ s.monitoringlocationdescriptiontext }}</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+							
+						</table>
+					</div>
+				</div>
+			{% else %}
+				<div class="row">
+
+					<div class="col-md-12">
+						<h4>No site data found</h4>
+					</div>
+				</div>
+				
+			{% endif %}
+			
+		
+	</div>
+
+{% endblock content %} 

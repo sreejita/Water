@@ -26,10 +26,14 @@ from wisconsin import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name ='index'),
-    url(r'^lake/(?P<id>.+)/', views.lake_detail, name ='waterbody_detail'),
     url(r'^lake_to_site/', views.lake_to_site, name ='lake_to_site'),
     url(r'^site_to_lake/', views.site_to_lake, name ='site_to_lake'),
     url(r'^waterbodies/', views.waterbodies, name ='waterbodies'),
+    url(r'^lake/(?P<id>.+)/', views.lake_detail, name ='lake_detail'),
+    url(r'^sites/', views.sites, name ='sites'),
+    url(r'^site/(?P<id>.+)/', views.site_detail, name ='site_detail'),
+    url(r'^bbs/', views.bb, name ='bbs'),
+    url(r'^bb/(?P<id>.+)/', views.bb_detail, name ='bb_detail'),
     # July 17 Login Change
     #url(r'^frontend/', include('frontend.urls',namespace='frontend',app_name='frontend')),
     #url(r'^$', RedirectView.as_view(permanent=False, url='/frontend/ulogin/')),

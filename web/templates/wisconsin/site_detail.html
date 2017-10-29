@@ -1,35 +1,196 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<a href="{% url 'index' %}">
-		Back to Home
-	</a>
-	{% if sites %}
-		<h3 id="heading">Sites for lake id : {{ nhd_lake_id }}
-		</h3>
-		<h3>Lake Name : {{ lake_name }}
-		</h3>
-		<table>
-			<tr>
-				<th>Site ID</th>
-				<th>Monitoring Location</th>
-				<th>Inside Lake</th>
-				<th>Distance to Shore (in m)</th>
-			</tr>
 
-		{% for s in sites %}
-			<tr>
-				<td>{{ s.site_id }}</td>
-				<td>{{ s.monitoringlocationname }}</td>
-				<td>{{ s.isinsidelake }}</td>
-				<td>{{ s.disttoshore_m }}</td>
-			</tr>
-		{% endfor %}
-		
-	{% else %}
-		<h3>No data found for lake id : {{ nhd_lake_id }}
-		</h3>
-		
-	{% endif %}
+	<div class="grey-wrapper">
+		{% if sites %}
+			<div class="row">
+				<div class="col-md-12">
+					<h3 id="heading">Site Details
+					</h3>
+				</div>
+			</div>
+			<div class="row top-buffer">
+			
+				<div class="col-md-12">
+					<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
+						<!--thead>
+							<tr class="bootstrap-blue-bg">
+								<th>Metric</th>
+								<th>Org Name</th>
+								<th>Org Id</th>
+								<th>HUC</th>
+								<th>Monitoring Location</th>
+								<th>Location Type</th>
+								<th>Location Description</th>
+							</tr>
+						</thead-->
+						
+						<tbody>
+							{% for s in sites %}
+								<tr>
+									<td>Site ID</td>
+									<td>{{ s.site_id }}</td>
+									<!--td>{{ s.organizationformalname }}</td>
+									<td>{{ s.organizationidentifier }}</td>
+									<td>{{ s.huceightdigitcode | floatformat:0 }}</td>
+									<td>{{ s.monitoringlocationname }}</td>
+									<td>{{ s.monitoringlocationtypename }}</td>
+									<td>{{ s.monitoringlocationdescriptiontext }}</td-->
+								</tr>
+								<tr>
+									<td>Organization Name</td>
+									<td>{{ s.organizationformalname }}</td>
+								</tr>
+								<tr>
+									<td>Organization ID</td>
+									<td>{{ s.organizationidentifier }}</td>
+								</tr>
+								<tr>
+									<td>Monitoring Location</td>
+									<td>{{ s.monitoringlocationname }}</td>
+								</tr>
+								<tr>
+									<td>Monitoring Location Type</td>
+									<td>{{ s.monitoringlocationtypename }}</td>
+								</tr>
+								<tr>
+									<td>Monitoring Location Description</td>
+									<td>{{ s.monitoringlocationdescriptiontext }}</td>
+								</tr>
+								<tr>
+									<td>HUC code</td>
+									<td>{{ s.huceightdigitcode | floatformat:0 }}</td>
+								</tr>
+								<tr>
+									<td>Drainage Measure</td>
+									<td>{{ s.drainageareameasure_measurevalue }}
+									{% if s.drainageareameasure_measurevalue and s.drainageareameasure_measureunitcode %}
+									 {{ s.drainageareameasure_measureunitcode }}
+									{% endif %}
+									</td>
+								</tr>
+								
+								<tr>
+									<td>Contributing Drainage Measure</td>
+									<td>{{ s.contributingdrainageareameasure_measurevalue }} 
+									{% if s.contributingdrainageareameasure_measurevalue and s.contributingdrainageareameasure_measureunitcode %}
+									 {{ s.contributingdrainageareameasure_measureunitcode }}
+									{% endif %}
+									</td>
+								</tr>
+								
+								<tr>
+									<td>Latitude</td>
+									<td>{{ s.latitudemeasure }}</td>
+								</tr>
+								<tr>
+									<td>Longitude</td>
+									<td>{{ s.longitudemeasure }}</td>
+								</tr>
+								<tr>
+									<td>Sorce Map Scale</td>
+									<td>{{ s.sourcemapscalenumeric }}</td>
+								</tr>
+								<tr>
+									<td>Horizontal Accuracy</td>
+									<td>{{ s.horizontalaccuracymeasure_measurevalue }} 
+									{% if s.horizontalaccuracymeasure_measurevalue and s.horizontalaccuracymeasure_measureunitcode %}
+									 {{ s.horizontalaccuracymeasure_measureunitcode }}
+									{% endif %}
+									</td>
+								</tr>
+								
+								<tr>
+									<td>Horizontal Collection Name</td>
+									<td>{{ s.horizontalcollectionmethodname }}</td>
+								</tr>
+								<tr>
+									<td>Horizontal Coordinate Reference System</td>
+									<td>{{ s.horizontalcoordinatereferencesystemdatumname }}</td>
+								</tr>
+								<tr>
+									<td>Vertical Measure</td>
+									<td>{{ s.verticalmeasure_measurevalue }}
+									{% if s.verticalmeasure_measurevalue and s.verticalmeasure_measureunitcode %}
+									 {{ s.verticalmeasure_measureunitcode }}
+									{% endif %}
+									 </td>
+								</tr>
+								
+								<tr>
+									<td>Vertical Accuracy</td>
+									<td>{{ s.verticalaccuracymeasure_measurevalue }}
+									{% if s.verticalaccuracymeasure_measurevalue and s.verticalaccuracymeasure_measureunitcode %}
+									 {{ s.verticalaccuracymeasure_measureunitcode }}
+									{% endif %}
+									 </td>
+								</tr>
+								
+								<tr>
+									<td>Vertical Collection Name</td>
+									<td>{{ s.verticalcollectionmethodname }}</td>
+								</tr>
+								<tr>
+									<td>Vertical Coordinate Reference System</td>
+									<td>{{ s.verticalcoordinatereferencesystemdatumname }}</td>
+								</tr>
+								<tr>
+									<td>Country Code</td>
+									<td>{{ s.countrycode }}</td>
+								</tr>
+								<tr>
+									<td>State Code</td>
+									<td>{{ s.statecode }}</td>
+								</tr>
+								<tr>
+									<td>County Code</td>
+									<td>{{ s.countycode }}</td>
+								</tr>
+								<tr>
+									<td>Aquifier Name</td>
+									<td>{{ s.aquifername }}</td>
+								</tr>
+								<tr>
+									<td>Formation Type</td>
+									<td>{{ s.formationtypetext }}</td>
+								</tr>
+								<tr>
+									<td>Aquifier Type</td>
+									<td>{{ s.aquifertypename }}</td>
+								</tr>
+								<tr>
+									<td>Construction Date</td>
+									<td>{{ s.constructiondatetext }}</td>
+								</tr>
+								<tr>
+									<td>Well depth</td>
+									<td>{{ s.welldepthmeasure_measurevalue }}
+									{% if s.welldepthmeasure_measurevalue and s.welldepthmeasure_measureunitcode %}
+									 {{ s.welldepthmeasure_measureunitcode }}
+									{% endif %}
+									 </td>
+								</tr>
+								<tr>
+									<td>Well Hole Depth</td>
+									<td>{{ s.wellholedepthmeasure_measurevalue }}</td>
+								</tr>
+								
+							{% endfor %}
+						</tbody>
+						
+					</table>
+				</div>
+			</div>
+		{% else %}
+			<div class="row">
+
+				<div class="col-md-12">
+					<h4>No data found</h4>
+				</div>
+			</div>
+			
+		{% endif %}
+	</div>
 
 {% endblock content %} 
