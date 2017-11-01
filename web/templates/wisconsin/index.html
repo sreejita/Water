@@ -7,9 +7,16 @@
                 <div class="form-top">
                     <div class="form-top-left">
                     	<h3>Lake to Site 
-                    		<i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves site details related to a lake."></i>
+                    		<!--i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves site details related to a lake."></i-->
                     	</h3>
+                    	
                     </div>
+                    
+                    
+                </div>
+                <div class="form-top">
+	                    	<i>Obtain sites associated with a lake by providing the Lake ID</i>
+	                    
                 </div>
                 <div class="form-top">
                 	<form action="/lake_to_site/" method="POST">	
@@ -31,9 +38,13 @@
                 <div class="form-top">
                     <div class="form-top-left">
                     	<h3>Site to Lake 
-                    		<i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves the lake details related to a site."></i>
+                    		<!--i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves the lake details related to a site."></i-->
                     	</h3>
                     </div>
+                </div>
+                <div class="form-top">
+	                    	<i>Obtain the lake associated with a site by providing the Site ID</i>
+	                    
                 </div>
                 <div class="form-top">
                 	<form action="/site_to_lake/" method="POST">	
@@ -52,11 +63,16 @@
                 <div class="form-top">
                     <div class="form-top-left">
                     	<h3>Query Waterbodies 
-                    		<i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves details about specific waterbodies based on the query parameter passed."></i>
+                    		<!--i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves details about specific waterbodies based on the query parameter passed."></i-->
                     	</h3>
+                    	
                     </div>
                 </div>
-                <div class="form-top" style="height: 411px;">
+                <div class="form-top">
+	                    	<i>Retrieves details about specific waterbodies based on the parameter(s) passed.</i>
+	                    
+                </div>
+                <div class="form-top">
                 	<form action="/waterbodies/" method="POST">	
                 		{{ form_waterbodies.non_field_errors }}
                 		<!--div class="form-group">
@@ -91,6 +107,12 @@
 					        </div>
 						    
 				    	</div>
+				    	<div class="form-group"  id="fcode_tb">
+					        {{ form_waterbodies.fcode.errors }}
+					        <label class="sr-only" for="id_fcode">Fcode:</label>
+					        {{ form_waterbodies.fcode }}
+						    
+				    	</div>
 				    	{% csrf_token %}
 			  			<button type="submit" class="btn" style="font-size: large">Submit</button>
 				    </form> 
@@ -106,9 +128,13 @@
                 <div class="form-top">
                     <div class="form-top-left">
                     	<h3>Query Sites 
-                    		<i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves details about specific sites based on the query parameter passed."></i>
+                    		<!--i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves details about specific sites based on the query parameter passed."></i-->
                     	</h3>
                     </div>
+                </div>
+                <div class="form-top">
+	                    	<i>Retrieves details about specific sites based on the parameter(s) passed.</i>
+	                    
                 </div>
                 <div class="form-top">
                 	<form action="/sites/" method="POST">	
@@ -145,7 +171,7 @@
 					        {{ form_sites.org_id }}
 						    
 				    	</div>
-				    	<div class="form-group"  id="area_tb">
+				    	<!--div class="form-group"  id="area_tb">
 					    
 					        {{ form_sites.monitoring_location.errors }}
 					       
@@ -154,7 +180,7 @@
 						        {{ form_sites.monitoring_location }}
 					       
 						    
-				    	</div>
+				    	</div-->
 				    	<div class="form-group"  id="area_tb">
 					    
 					        {{ form_sites.huc.errors }}
@@ -179,9 +205,13 @@
                 <div class="form-top">
                     <div class="form-top-left">
                     	<h3>Query Bounding Box 
-                    		<i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves bounding box details for lakes that lie within the specified latitudes and longitudes."></i>
+                    		<!--i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves bounding box details for lakes that lie within the specified latitudes and longitudes."></i-->
                     	</h3>
                     </div>
+                </div>
+                <div class="form-top">
+	                    	<i>Obtains bounding box coordinates for waterbodies that lie within the specified latitudes and longitudes and subsequently, retrieves the sites associated with each of them.</i>
+	                    
                 </div>
                 <div class="form-top">
                 	<form action="/bbs/" method="POST">	

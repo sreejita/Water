@@ -21,7 +21,18 @@
 	        <div class="row">
 	          <div class="col-sm-8 py-4">
 	            <h4 class="text-white">About</h4>
-	            <p class="text-muted">Add some information ....</p>
+	            <h5 class="text-muted">
+	            	Madwater.io provides a web query interface on data related to waterbodies and sites (location where samples are collected) in the state of Wisconsin.  Details of waterbodies are obtained from NHD. The 
+	            	<a href="https://nhd.usgs.gov/NHD_High_Resolution.html">NHD</a>
+	            	 is a digital geospatial dataset that maps the surface water of US. It represents the water drainage network of the US with features such as rivers, streams, canals, lakes, ponds, coastline, dams, and stream gages.The site information for each waterbody is retrieved from Water Quality Data Portal. The 
+	            	<a href="https://www.waterqualitydata.us/">WQP</a>
+	            	provides an effortless way to access data stored in various large water quality databases.
+	            </h5>
+	            <h5 class="text-muted top-buffer">
+					Process of correlating waterbodies to sites: </h5>
+				<h5 class="text-muted">
+					Shapefiles for each water body were downloaded from NHD. A polygon was constructed for each water body based on the coordinates of the boundary obtained from these shapefiles. Subsequently, the bounding box (or latitude and longitude) coordinates were retrieved and using them, the sites associated with each water body was fetched from WQP. For each site obtained, information of whether the site was inside (or outside) the water body and its distance from shore (or boundary of the water body) was recorded.
+				</h5>
 	          </div>
 	          <div class="col-sm-4 py-4">
 	          	<img src="/static/mendota.png">

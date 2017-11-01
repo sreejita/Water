@@ -14,7 +14,7 @@
 			</div>
 			<div class="row top-buffer">
 				<div class="col-md-12 top-buffer">
-					<h6>Lake ID : {{ nhd_lake_id }}
+					<h6>Lake ID : <a href="{% url 'lake_detail' nhd_lake_id %}">{{ nhd_lake_id }}</a>
 					</h6>
 				
 					<h6>Lake Name : {{ lake_name }}
@@ -37,7 +37,7 @@
 						<tbody>
 							{% for s in sites %}
 								<tr>
-									<td>{{ s.site_id }}</td>
+									<td><a href="{% url 'site_detail' s.site_id %}">{{ s.site_id }}</a></td>
 									<td>{{ s.monitoringlocationname }}</td>
 									<td>{{ s.isinsidelake }}</td>
 									<td>{{ s.disttoshore_m | floatformat:5 }}</td>

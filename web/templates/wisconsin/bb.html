@@ -30,8 +30,8 @@
 							{% for b in bbs %}
 								<tr>
 									<td><a href="{% url 'bb_detail' b.bb_id %}">{{ b.bb_id }}</a></td>
-									<td>{{ b.north | floatformat:5 }}</td>
 									<td>{{ b.south | floatformat:5 }}</td>
+									<td>{{ b.north | floatformat:5 }}</td>
 									<td>{{ b.east | floatformat:5 }}</td>
 									<td>{{ b.west | floatformat:5 }}</td>
 								</tr>

@@ -44,7 +44,7 @@
 			</div>
 			<div class="row top-buffer">
 				<div class="col-md-12 top-buffer">
-					<h6>Site ID : {{ site_id }}
+					<h6>Site ID : <a href="{% url 'site_detail' site_id %}">{{ site_id }}</a>
 					</h6>
 				</div>
 			</div>
@@ -65,7 +65,7 @@
 						<tbody>
 							{% for l in lakes %}
 								<tr>
-									<td>{{ l.nhd_lake_id }}</td>
+									<td><a href="{% url 'lake_detail' l.nhd_lake_id %}">{{ l.nhd_lake_id }}</a></td>
 									<td>{{ l.gnis_lake_name }}</td>
 									<td>{{ l.monitoringlocationname }}</td>
 									<td>{{ l.isinsidelake }}</td>

@@ -59,7 +59,7 @@
 									<td>{{ s.monitoringlocationdescriptiontext }}</td>
 								</tr>
 								<tr>
-									<td>HUC code</td>
+									<td>HUC code [8-digit federal code to identify the hydrologic unit of the monitoring location]</td>
 									<td>{{ s.huceightdigitcode | floatformat:0 }}</td>
 								</tr>
 								<tr>
@@ -93,7 +93,7 @@
 									<td>{{ s.sourcemapscalenumeric }}</td>
 								</tr>
 								<tr>
-									<td>Horizontal Accuracy</td>
+									<td>Horizontal Accuracy [of the relative accuracy of the latitude and longitude coordinates]</td>
 									<td>{{ s.horizontalaccuracymeasure_measurevalue }} 
 									{% if s.horizontalaccuracymeasure_measurevalue and s.horizontalaccuracymeasure_measureunitcode %}
 									 {{ s.horizontalaccuracymeasure_measureunitcode }}
@@ -119,7 +119,7 @@
 								</tr>
 								
 								<tr>
-									<td>Vertical Accuracy</td>
+									<td>Vertical Accuracy[of the relative accuracy of the latitude and longitude coordinates]</td>
 									<td>{{ s.verticalaccuracymeasure_measurevalue }}
 									{% if s.verticalaccuracymeasure_measurevalue and s.verticalaccuracymeasure_measureunitcode %}
 									 {{ s.verticalaccuracymeasure_measureunitcode }}

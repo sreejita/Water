@@ -4,7 +4,8 @@ class LakeToSiteForm(forms.Form):
 	lake_id = forms.CharField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter lake id...',
+				'placeholder' : 'Enter Lake ID (e.g. 37649095)...',
+				'required' : 'true',
 			}
 		), label='')
 
@@ -13,7 +14,8 @@ class SiteToLakeForm(forms.Form):
 	site_id = forms.CharField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter site id...',
+				'placeholder' : 'Enter Site ID (e.g. USGS-443840092400301)...',
+				'required' : 'true',
 			}
 		), label='')
 
@@ -36,13 +38,13 @@ class WaterbodiesForm(forms.Form):
 	  lake_id = forms.CharField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter Lake ID...',
+				'placeholder' : 'Enter Lake ID (e.g. 120017988)...',
 			}
 		), label='', required=False,)
 	  lake_name = forms.CharField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter Lake Name...',
+				'placeholder' : 'Enter Lake Name (e.g. Coon Lake)...',
 			}
 		), label='', required=False,)
 	  area_cmp = forms.ChoiceField(choices=AREA_COMPARATORS, widget=forms.Select(
@@ -53,7 +55,13 @@ class WaterbodiesForm(forms.Form):
 	  area = forms.DecimalField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter Area...',
+				'placeholder' : 'Enter Area (e.g. 50)...',
+			}
+		), label='', required=False,)
+	  fcode = forms.IntegerField(widget=forms.TextInput(
+			attrs={
+				'class' : 'form-control',
+				'placeholder' : 'Enter Feature Code (e.g. 39004)...',
 			}
 		), label='', required=False,)
 
@@ -66,7 +74,7 @@ class SitesForm(forms.Form):
 	  site_id = forms.CharField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter Site ID...',
+				'placeholder' : 'Enter Site ID (e.g. USGS-444522093102600)...',
 			}
 		), required=False,)
 	  org_name = forms.CharField(widget=forms.TextInput(
@@ -78,19 +86,13 @@ class SitesForm(forms.Form):
 	  org_id = forms.CharField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter Organization ID...',
-			}
-		), label='', required=False,)
-	  monitoring_location = forms.CharField(widget=forms.TextInput(
-			attrs={
-				'class' : 'form-control',
-				'placeholder' : 'Enter Monitoring Location...',
+				'placeholder' : 'Enter Organization ID (e.g. USGS-MN)...',
 			}
 		), label='', required=False,)
 	  huc = forms.DecimalField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter HUC...',
+				'placeholder' : 'Enter 8-digit HUC (e.g. 7040001)...',
 			}
 		), label='', required=False,)
 
@@ -99,25 +101,29 @@ class BoundingBoxForm(forms.Form):
 	  east = forms.DecimalField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter East Longitude...',
+				'placeholder' : 'Enter East Longitude (e.g. -91.2427227688)...',
+				'required' : 'true',
 			}
 		), label='', )
 	  west = forms.DecimalField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter West Longitude...',
+				'placeholder' : 'Enter West Longitude (e.g. -91.2545777688)...',
+				'required' : 'true',
 			}
 		), label='', )
 	  north = forms.DecimalField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter North Latitude...',
+				'placeholder' : 'Enter North Latitude (e.g. 43.4081387326)...',
+				'required' : 'true',
 			}
 		), label='',)
 	  south = forms.DecimalField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter South Latitude...',
+				'placeholder' : 'Enter South Latitude (e.g. 43.3915035993)...',
+				'required' : 'true',
 			}
 		), label='', )
 

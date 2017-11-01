@@ -154,6 +154,7 @@ def waterbodies(request):
 			lake_name = cd['lake_name']
 			area_cmp = cd['area_cmp']
 			area = cd['area']
+			fcode = cd['fcode']
 			
 			kwargs = { }
 			if(lake_id) :
@@ -162,6 +163,8 @@ def waterbodies(request):
 				kwargs['gnis_name'] = lake_name
 			if(area) :
 				kwargs['{0}__{1}'.format('area_sqkm', area_cmp)] = area
+			if(fcode) :
+				kwargs['fcode'] = fcode
 			
 			lakes = Waterbodies.objects.filter(**kwargs)
 
@@ -199,7 +202,7 @@ def sites(request):
 			site_id = cd['site_id']
 			org_name = cd['org_name']
 			org_id = cd['org_id']
-			monitoring_location = cd['monitoring_location']
+			#monitoring_location = cd['monitoring_location']
 			huc = cd['huc']
 			kwargs = { }
 			if(site_id) :
@@ -208,8 +211,8 @@ def sites(request):
 				kwargs['organizationformalname'] = org_name
 			if(org_id) :
 				kwargs['organizationidentifier'] = org_id
-			if(monitoring_location) :
-				kwargs['monitoringlocationname'] = monitoring_location
+			'''if(monitoring_location) :
+				kwargs['monitoringlocationname'] = monitoring_location'''
 			if(huc) :
 				kwargs['huceightdigitcode'] = huc
 			sites = Sites.objects.filter(**kwargs)
@@ -245,7 +248,7 @@ def bb(request):
 			e = cd['east']
 			w = cd['west']
 			
-			bbs = Boundingbox.objects.filter(north__lte=n, south__gte=s, east__lte=e, west__gte=w)
+			bbs = Boundingbox.objects.filter(south__lte=n, north__gte=s, east__lte=e, west__gte=w)
 
 	else:
 		form = LakeToSiteForm()
