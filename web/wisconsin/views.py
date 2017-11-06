@@ -97,11 +97,13 @@ def lake_to_site(request):
 		forms2l = SiteToLakeForm()
 		form_waterbodies = WaterbodiesForm()
 		form_sites = SitesForm()
+		form_bb= BoundingBoxForm()
 		return render(request, 'wisconsin/index.html', {
 			'form' : form,
 			'forms2l' : forms2l,
 			'form_waterbodies' : form_waterbodies,
 			'form_sites' : form_sites,
+			'form_bb' : form_bb,
 		})
 
 	return render(request, 'wisconsin/lake_to_site.html', {
@@ -129,12 +131,14 @@ def site_to_lake(request):
 		forms2l = SiteToLakeForm()
 		form_waterbodies = WaterbodiesForm()
 		form_sites = SitesForm()
+		form_bb= BoundingBoxForm()
 		return render(request, 'wisconsin/index.html', {
 			#'lakes' : lakes,
 			'form' : form,
 			'forms2l' : forms2l,
 			'form_waterbodies' : form_waterbodies,
 			'form_sites' : form_sites,
+			'form_bb' : form_bb,
 		})
 
 	return render(request, 'wisconsin/site_to_lake.html', {
@@ -160,7 +164,7 @@ def waterbodies(request):
 			if(lake_id) :
 				kwargs['nhd_lake_id'] = lake_id
 			if(lake_name) :
-				kwargs['gnis_name'] = lake_name
+				kwargs['{0}__{1}'.format('gnis_name', 'icontains')] = lake_name
 			if(area) :
 				kwargs['{0}__{1}'.format('area_sqkm', area_cmp)] = area
 			if(fcode) :
@@ -208,7 +212,7 @@ def sites(request):
 			if(site_id) :
 				kwargs['site_id'] = site_id
 			if(org_name) :
-				kwargs['organizationformalname'] = org_name
+				kwargs['{0}__{1}'.format('organizationformalname', 'icontains')] = org_name
 			if(org_id) :
 				kwargs['organizationidentifier'] = org_id
 			'''if(monitoring_location) :
@@ -222,12 +226,14 @@ def sites(request):
 		forms2l = SiteToLakeForm()
 		form_waterbodies = WaterbodiesForm()
 		form_sites = SitesForm()
+		form_bb= BoundingBoxForm()
 		return render(request, 'wisconsin/index.html', {
 			#'lakes' : lakes,
 			'form' : form,
 			'forms2l' : forms2l,
 			'form_waterbodies' : form_waterbodies,
 			'form_sites' : form_sites,
+			'form_bb' : form_bb,
 		})
 
 	return render(request, 'wisconsin/sites.html', {
