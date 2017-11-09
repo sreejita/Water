@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from django.http import Http404
+import json
 
 from wisconsin.models import Waterbodies
 from wisconsin.models import W2S
@@ -16,7 +17,16 @@ from wisconsin.forms import SiteToLakeForm
 from wisconsin.forms import WaterbodiesForm
 from wisconsin.forms import SitesForm
 from wisconsin.forms import BoundingBoxForm
+import decimal
 
+class DecimalEncoder(json.JSONEncoder):
+    def _iterencode(self, o, markers=None):
+        if isinstance(o, decimal.Decimal):
+            # wanted a simple yield str(o) in the next line,
+            # but that would mean a yield on the line with super(...),
+            # which wouldn't work (see my comment below), so...
+            return (str(o) for o in [o])
+        return super(DecimalEncoder, self)._iterencode(o, markers)
 # Create your views here.
 def index(request):
 	#lakes = Waterbodies.objects.filter()
@@ -54,9 +64,12 @@ def lake_detail(request, id):
 
 def site_detail(request, id):
 	sites = Sites.objects.filter(site_id=id)
-	
+	geo = {}
+	geo["lat"] = str(sites[0].latitudemeasure);
+	geo["lng"] = str(sites[0].longitudemeasure);
 	return render(request, 'wisconsin/site_detail.html', {
 		'sites' : sites,
+		'geo' : json.dumps(geo),
 	})
 
 

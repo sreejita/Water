@@ -20,3 +20,29 @@ console.log("HELLOOO");
 			        }
 			    }); */
 			});
+
+		function initMap() {
+		console.log("Geo");
+
+		//var geo = {% autoescape off %}{{geo}}{% endautoescape %};
+		console.log(JSON.parse(geovar));
+       // var uluru = {lat: -25.363, lng: 131.044};
+        var uluru = JSON.parse(geovar);
+        
+        uluru.lat = parseFloat(uluru.lat);
+        uluru.lng = parseFloat(uluru.lng);
+        
+        //var lurur = Object.assign({}, uluru);;
+        
+        
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 14,
+          center: uluru
+        });
+        //var position1 = new google.maps.LatLng(uluru.lat, uluru.lng);
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+
+      }
