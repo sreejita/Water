@@ -20,29 +20,64 @@ console.log("HELLOOO");
 			        }
 			    }); */
 			});
-
-		function initMap() {
-		console.log("Geo");
-
-		//var geo = {% autoescape off %}{{geo}}{% endautoescape %};
-		console.log(JSON.parse(geovar));
-       // var uluru = {lat: -25.363, lng: 131.044};
-        var uluru = JSON.parse(geovar);
-        
-        uluru.lat = parseFloat(uluru.lat);
-        uluru.lng = parseFloat(uluru.lng);
-        
-        //var lurur = Object.assign({}, uluru);;
-        
-        
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 14,
-          center: uluru
-        });
-        //var position1 = new google.maps.LatLng(uluru.lat, uluru.lng);
-        var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
-        });
+		function onL2SSubmit() {
+			var actionUrl = "/lake_to_site/" + $('#id_lake_id').val() + "/";
+			$('#forml2s').attr('action', actionUrl);
+		}
+		function initMap() { 
+			console.log("Geo");
+			
+			
+	       // var uluru = {lat: -25.363, lng: 131.044};
+	      if( typeof geovar != 'undefined' ) {
+	       	console.log(JSON.parse(geovar));
+	       	var uluru = JSON.parse(geovar);
+	        
+	        uluru.lat = parseFloat(uluru.lat);
+	        uluru.lng = parseFloat(uluru.lng);
+	        
+	        //var lurur = Object.assign({}, uluru);;
+	        
+	        
+	        var map = new google.maps.Map(document.getElementById('map'), {
+	          zoom: 14,
+	          center: uluru
+	        });
+	        //var position1 = new google.maps.LatLng(uluru.lat, uluru.lng);
+	        var marker = new google.maps.Marker({
+	          position: uluru,
+	          map: map
+	        });
+	       } 
+	        
+	       if(typeof geoArrL2S != 'undefined') {
+	       	 console.log(JSON.parse(geoArrL2S));
+	       	 var geo_l2s = JSON.parse(geoArrL2S);
+	       	 //var bounds = new google.maps.LatLngBounds();
+	       	 
+	       
+	       	var mapl2s = new google.maps.Map(document.getElementById('mapl2s'), {
+	          zoom: 14,
+	          center: new google.maps.LatLng(parseFloat(geo_l2s[0].lat), parseFloat(geo_l2s[0].lng))
+	        });
+	       	
+	       	 for(var i in geo_l2s)
+			{
+				console.log(geo_l2s[i]);
+				var position = new google.maps.LatLng(parseFloat(geo_l2s[i].lat), parseFloat(geo_l2s[i].lng));
+				
+			    // bounds.extend(position);
+			     var marker = new google.maps.Marker({
+			          position: position,
+			          map: mapl2s,
+			          title: geo_l2s[i].title
+			        }); 
+			    // mapl2s.fitBounds(bounds);
+			} 
+			// var boundsListener = google.maps.event.addListener((mapl2s), 'bounds_changed', function(event) {
+		      //  this.setZoom(14);
+		        //google.maps.event.removeListener(boundsListener);
+		    //});
+	       }
 
       }

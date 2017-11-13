@@ -19,12 +19,12 @@
 	                    
                 </div>
                 <div class="form-top">
-                	<form action="/lake_to_site/" method="POST">	
+                	<form id="forml2s" method="POST" >	
                 		<div class="form-group">
 				    		{{ form.as_p }}
 				    	</div>
 				    	{% csrf_token %}
-			  			<button type="submit" class="btn" style="font-size: large">Submit</button>
+			  			<button type="submit" onclick="onL2SSubmit();" class="btn" style="font-size: large">Submit</button>
 				    </form> 
                 </div>
             </div>

@@ -90,7 +90,31 @@ def bb_detail(request, id):
 		'bb_id' : id,
 	})
 
-def lake_to_site(request):
+def lake_to_site(request, id):
+	lake_name = ''
+	sites = ''
+	
+	sites = W2S.objects.filter(nhd_lake_id=id)
+	geoArr = []
+	if (len(sites) > 0):
+		site = sites[0]
+		lake_name = site.gnis_lake_name
+		for s in sites:
+			site = Sites.objects.filter(site_id=s.site_id)[0];
+			geo = {}
+			geo["lat"] = str(site.latitudemeasure)
+			geo["lng"] = str(site.longitudemeasure)
+			geo['title'] = site.site_id
+			geoArr.append(geo);
+
+	return render(request, 'wisconsin/lake_to_site.html', {
+		'sites' : sites,
+		'nhd_lake_id' : id,
+		'lake_name' : lake_name,
+		'geo_arr' : json.dumps(geoArr),
+	})
+
+'''def lake_to_site(request):
 	lake_name = ''
 	id = ''
 	sites = ''
@@ -100,17 +124,24 @@ def lake_to_site(request):
 			cd = form.cleaned_data
 			id = cd['lake_id']
 			sites = W2S.objects.filter(nhd_lake_id=id)
-
+			geoArr = []
 			if (len(sites) > 0):
 				site = sites[0]
 				lake_name = site.gnis_lake_name
+				for s in sites:
+					site = Sites.objects.filter(site_id=s.site_id)[0];
+					geo = {}
+					geo["lat"] = str(site.latitudemeasure)
+					geo["lng"] = str(site.longitudemeasure)
+					geo['title'] = site.site_id
+					geoArr.append(geo);
 
 	else:
 		form = LakeToSiteForm()
 		forms2l = SiteToLakeForm()
 		form_waterbodies = WaterbodiesForm()
 		form_sites = SitesForm()
-		form_bb= BoundingBoxForm()
+		form_bb = BoundingBoxForm()
 		return render(request, 'wisconsin/index.html', {
 			'form' : form,
 			'forms2l' : forms2l,
@@ -123,8 +154,9 @@ def lake_to_site(request):
 		'sites' : sites,
 		'nhd_lake_id' : id,
 		'lake_name' : lake_name,
+		'geo_arr' : json.dumps(geoArr),
 	})
-
+'''
 def site_to_lake(request):
 	lakes = ''
 	id = ''
@@ -268,6 +300,9 @@ def bb(request):
 			w = cd['west']
 			
 			bbs = Boundingbox.objects.filter(south__lte=n, north__gte=s, east__lte=e, west__gte=w)
+
+			#for bb in bbs:
+				#bb.lake_id = W2B.objects.filter(bb_id=bb.bb_id)[0].nhd_lake_id
 
 	else:
 		form = LakeToSiteForm()
