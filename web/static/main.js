@@ -83,25 +83,44 @@ console.log("HELLOOO");
 	       	 console.log(JSON.parse(geoArrL2S));
 	       	 var geo_l2s = JSON.parse(geoArrL2S);
 	       	 var bounds = new google.maps.LatLngBounds();
-	       	 
+	       	 var infowindow = new google.maps.InfoWindow(); 
 	       
 	       	var mapl2s = new google.maps.Map(document.getElementById('mapl2s'), {
 	          zoom: 14,
 	          center: new google.maps.LatLng(parseFloat(geo_l2s[0].lat), parseFloat(geo_l2s[0].lng))
 	        });
-	       	
+	       	 var infoContent = [];
+
 	       	 for(var i in geo_l2s)
 			{
-				console.log(geo_l2s[i]);
+				//console.log(geo_l2s[i]);
 				var position = new google.maps.LatLng(parseFloat(geo_l2s[i].lat), parseFloat(geo_l2s[i].lng));
-				
-			    
+				var infoElem = '<div class="info_content">' +
+        								'<b>Site ID: </b>'+ geo_l2s[i].title + '<br>' + 
+        								'<b>Latitude: </b>'+ geo_l2s[i].lat + '<br>' + 
+        								'<b>Longitude: </b>'+ geo_l2s[i].lng + '<br>' + 
+        								'<b>Monitoring Location: </b>'+ geo_l2s[i].monitor_loc + '<br>' + 
+        								'<b>Inside Lake: </b>'+ geo_l2s[i].inside_lake + '<br>' + 
+        								'<b>Distance from shore: </b>'+ geo_l2s[i].dist_shore + ' m<br>' + 
+        								'<a href="/site/' + geo_l2s[i].title +'">More...</a>'+    
+        							'</div>'
+
+			     infoContent.push(infoElem);
 			     var marker = new google.maps.Marker({
 			          position: position,
 			          map: mapl2s,
 			          title: geo_l2s[i].title
 			        }); 
 			     bounds.extend(marker.position);
+
+			     google.maps.event.addListener(marker, 'click', (function(marker, i) {
+				    return function() {
+				      //console.log(i);
+				      //console.log(infoContent[i]);
+				      infowindow.setContent(infoContent[i]);
+				      infowindow.open(mapl2s, marker);
+				    }
+				  })(marker, i));
 			    
 			} 
 			 mapl2s.fitBounds(bounds);

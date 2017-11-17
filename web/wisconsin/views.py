@@ -105,6 +105,9 @@ def lake_to_site(request, id):
 			geo["lat"] = str(site.latitudemeasure)
 			geo["lng"] = str(site.longitudemeasure)
 			geo['title'] = site.site_id
+			geo['monitor_loc'] = site.monitoringlocationname
+			geo['inside_lake'] = s.isinsidelake
+			geo['dist_shore'] = str(round(s.disttoshore_m , 5))
 			geoArr.append(geo);
 
 	return render(request, 'wisconsin/lake_to_site.html', {
