@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from django.http import Http404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 
 from wisconsin.models import Waterbodies
@@ -195,36 +196,51 @@ def site_to_lake(request):
 		#'lake_name' : lake_name,
 	})
 
-def waterbodies(request):
+def waterbodies(request, page):
 	lakes = ''
+	lake_list = ''
+	get_params = '?'
+	pg_range = ''
 	#lake_name = ''
-	if request.method == 'POST':
-		form_waterbodies = WaterbodiesForm(request.POST)
+	if request.method == 'GET':
+		form_waterbodies = WaterbodiesForm(request.GET)
 		if form_waterbodies.is_valid():
 			cd = form_waterbodies.cleaned_data
-			lake_id = cd['lake_id']
-			lake_name = cd['lake_name']
-			area_cmp = cd['area_cmp']
-			area = cd['area']
-			fcode = cd['fcode']
+			lake_id = request.GET.get('lake_id', '')
+			lake_name = request.GET.get('lake_name', '')
+			area_cmp = request.GET.get('area_cmp')
+			area = request.GET.get('area')
+			fcode = request.GET.get('fcode')
 			
 			kwargs = { }
 			if(lake_id) :
 				kwargs['nhd_lake_id'] = lake_id
+				get_params += 'lake_id=' + lake_id + '&'
 			if(lake_name) :
 				kwargs['{0}__{1}'.format('gnis_name', 'icontains')] = lake_name
+				get_params += 'lake_name=' + lake_name + '&'
+			if(area_cmp) :
+				get_params += 'area_cmp=' + area_cmp + '&'
 			if(area) :
 				kwargs['{0}__{1}'.format('area_sqkm', area_cmp)] = area
+				get_params += 'area=' + area + '&'
 			if(fcode) :
 				kwargs['fcode'] = fcode
+				get_params += 'fcode=' + fcode + '&'
 			
-			lakes = Waterbodies.objects.filter(**kwargs)
+			lake_list = Waterbodies.objects.filter(**kwargs)
 
-			#if (len(sites) > 0):
-			#	site = sites[0]
-			#	lake_name = site.gnis_lake_name
+			paginator = Paginator(lake_list, 20)
 
-	else:
+			
+			try:
+				lakes = paginator.page(page)
+			except PageNotAnInteger:
+				lakes = paginator.page(1)
+			except EmptyPage:
+				lakes = paginator.page(paginator.num_pages)
+
+	'''else:
 		form = LakeToSiteForm()
 		forms2l = SiteToLakeForm()
 		form_waterbodies = WaterbodiesForm()
@@ -237,10 +253,12 @@ def waterbodies(request):
 			'form_waterbodies' : form_waterbodies,
 			'form_sites' : form_sites,
 			'form_bb' : form_bb,
-		})
+		})'''
 
 	return render(request, 'wisconsin/waterbodies.html', {
 		'lakes' : lakes,
+		'params' : get_params,
+		#'range' : pg_range,
 		#'site_id' : id,
 		#'lake_name' : lake_name,
 	})
