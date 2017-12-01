@@ -87,6 +87,7 @@ def bb_detail(request, id):
 	return render(request, 'wisconsin/bb_detail.html', {
 		#'lake_id' : lake_id.nhd_lake_id,
 		'lake' : lake,
+		'lake_id' : lake_id.nhd_lake_id,
 		'sites' : sites,
 		'bb_id' : id,
 	})

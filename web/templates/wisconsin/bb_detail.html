@@ -14,15 +14,13 @@
 				<div class="row top-buffer">
 					<div class="col-md-12 top-buffer">
 						{% for l in lake %}
-							<h6>Lake ID : <a href="{% url 'lake_detail' l.nhd_lake_id %}">{{ l.nhd_lake_id }}</a>
+							<h6>Water body ID : <a href="{% url 'lake_detail' l.nhd_lake_id %}">{{ l.nhd_lake_id }}</a>
 							</h6>
 						
-							<h6>Lake Name : {{ l.gnis_name }}
+							<h6>Water body Name : {{ l.gnis_name }}
 							</h6>
 
-							<h6>
-							<a href ="{% url 'lake_to_site' l.nhd_lake_id %}"> View Sites on Map </a>
-							</h6>
+							
 						{% endfor %}
 					</div>
 				</div>
@@ -37,10 +35,11 @@
 			{% endif %}
 
 			{% if sites %}
+				
 				<div class="row top-buffer">
 					<div class="col-md-12 top-buffer">
 					
-					<h6>Sites :  
+					<h6>Sites (<a href ="{% url 'lake_to_site' lake_id %}"> View Sites on Map </a>) :  
 					</h6>
 						
 						

@@ -3,62 +3,6 @@
 {% block content %}
 	<div class="row">
 		<div class="col-md-5">
-			<div class="form-box">
-                <div class="form-top">
-                    <div class="form-top-left">
-                    	<h3>Lake to Site 
-                    		<!--i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves site details related to a lake."></i-->
-                    	</h3>
-                    	
-                    </div>
-                    
-                    
-                </div>
-                <div class="form-top">
-	                    	<i>Obtain sites associated with a lake by providing the Lake ID</i>
-	                    
-                </div>
-                <div class="form-top">
-                	<form id="forml2s" method="POST" >	
-                		<div class="form-group">
-				    		{{ form.as_p }}
-				    	</div>
-				    	{% csrf_token %}
-			  			<button type="submit" onclick="onL2SSubmit();" class="btn" style="font-size: large">Submit</button>
-				    </form> 
-                </div>
-            </div>
-		</div>
-		<div class="col-md-1 middle-border"></div>
-        <div class="col-md-1"></div>
-	    <br>
-	    <br>
-	    <div class="col-md-5">
-			<div class="form-box">
-                <div class="form-top">
-                    <div class="form-top-left">
-                    	<h3>Site to Lake 
-                    		<!--i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves the lake details related to a site."></i-->
-                    	</h3>
-                    </div>
-                </div>
-                <div class="form-top">
-	                    	<i>Obtain the lake associated with a site by providing the Site ID</i>
-	                    
-                </div>
-                <div class="form-top">
-                	<form action="/site_to_lake/" method="POST">	
-				    	{{ forms2l.as_p }}
-				    	{% csrf_token %}
-			  			<button type="submit" class="btn" style="font-size: large">Submit</button>
-				    </form> 
-                </div>
-            </div>
-		</div>
-	</div>
-	<hr>
-	<div class="row">
-		<div class="col-md-5">
 			<div class="form-box" style="padding-bottom: 30px;">
                 <div class="form-top">
                     <div class="form-top-left">
@@ -81,16 +25,16 @@
 					        {{ form_waterbodies.query_options }}
 						    
 				    	</div-->
-				    	<div class="form-group" id="lake_id_tb">
-					        {{ form_waterbodies.lake_id.errors }}
-					        <label class="sr-only" for="id_lake_id">Lake ID:</label>
-					        {{ form_waterbodies.lake_id }}
-						    
-				    	</div>
 				    	<div class="form-group"  id="lake_name_tb">
 					        {{ form_waterbodies.lake_name.errors }}
 					        <label class="sr-only" for="id_lake_name">Lake Name:</label>
 					        {{ form_waterbodies.lake_name }}
+						    
+				    	</div>
+				    	<div class="form-group" id="lake_id_tb">
+					        {{ form_waterbodies.lake_id.errors }}
+					        <label class="sr-only" for="id_lake_id">Lake ID:</label>
+					        {{ form_waterbodies.lake_id }}
 						    
 				    	</div>
 				    	<div class="form-group"  id="area_tb">
@@ -200,60 +144,128 @@
 	</div>
 	<hr>
 	<div class="row">
+		<div class="col-md-12">
+		    <div class="form-box" style="padding-bottom: 30px;">
+		    	<div class="row form-top">
+			    	<div class="col-md-5">
+		                <div class="form-top">
+		                    <div class="form-top-left" style="width: 90%;">
+		                    	<h3>Query Bounding Boxes
+		                    	</h3>
+		                    </div>
+		                </div>
+		                <div class="form-top">
+			                    	<i>Obtains bounding box coordinates for waterbodies that lie within the specified latitudes and longitudes and subsequently, retrieves the sites associated with each of them. Each bounding box is associated with a water body.</i>
+			                    
+		                </div>
+		            </div>
+		           
+
+			        <div class="col-md-2"></div>
+				    <br>
+				    <br>
+				    <div class="col-md-5" style="margin-top:30px;">
+				    	<div class="form-top">
+		                	<form action="/bbs/" method="POST">	
+		                		{{ form_bb.non_field_errors }}
+						    	<div class="form-group" id="org_name_tb">
+							        {{ form_bb.north.errors }}
+							        <label class="sr-only" for="id_lake_id">Site ID:</label>
+							        {{ form_bb.north }}
+								    
+						    	</div>
+						    	<div class="form-group" id="org_name_tb">
+							        {{ form_bb.south.errors }}
+							        <label class="sr-only" for="id_lake_id">:</label>
+							        {{ form_bb.south }}
+								    
+						    	</div>
+						    	<div class="form-group"  id="lake_name_tb">
+							        {{ form_bb.east.errors }}
+							        <label class="sr-only" for="id_lake_name">:</label>
+							        {{ form_bb.east }}
+								    
+						    	</div>
+						    	<div class="form-group"  id="lake_name_tb">
+							        {{ form_bb.west.errors }}
+							        <label class="sr-only" for="id_lake_name">:</label>
+							        {{ form_bb.west }}
+								    
+						    	</div>
+						    	
+						    	{% csrf_token %}
+					  			<button type="submit" class="btn" style="font-size: large">Submit</button>
+						    </form> 
+		                </div>
+				    </div>
+	            </div>    
+	        	
+		    </div>
+		</div>
+		<!--div class="col-md-1 middle-border"></div>
+        <div class="col-md-1"></div>
+	    <br>
+	    <br>
+	    <div class="col-md-5"></div-->
+	</div>
+	<hr>
+	<div class="row">
 		<div class="col-md-5">
-	    	<div class="form-box" style="padding-bottom: 30px;">
+			<div class="form-box">
                 <div class="form-top">
                     <div class="form-top-left">
-                    	<h3>Query Bounding Box 
-                    		<!--i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves bounding box details for lakes that lie within the specified latitudes and longitudes."></i-->
+                    	<h3>Lake to Site 
+                    		<!--i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves site details related to a lake."></i-->
+                    	</h3>
+                    	
+                    </div>
+                    
+                    
+                </div>
+                <div class="form-top">
+	                    	<i>Obtains sites associated with a lake by providing the Lake ID</i>
+	                    
+                </div>
+                <div class="form-top">
+                	<form id="forml2s" method="POST" >	
+                		<div class="form-group">
+				    		{{ form.as_p }}
+				    	</div>
+				    	{% csrf_token %}
+			  			<button type="submit" onclick="onL2SSubmit();" class="btn" style="font-size: large">Submit</button>
+				    </form> 
+                </div>
+            </div>
+		</div>
+		<div class="col-md-1 middle-border"></div>
+        <div class="col-md-1"></div>
+	    <br>
+	    <br>
+	    <div class="col-md-5">
+			<div class="form-box">
+                <div class="form-top">
+                    <div class="form-top-left">
+                    	<h3>Site to Lake 
+                    		<!--i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="Retrieves the lake details related to a site."></i-->
                     	</h3>
                     </div>
                 </div>
                 <div class="form-top">
-	                    	<i>Obtains bounding box coordinates for waterbodies that lie within the specified latitudes and longitudes and subsequently, retrieves the sites associated with each of them.</i>
+	                    	<i>Obtains the lake associated with a site by providing the Site ID</i>
 	                    
                 </div>
                 <div class="form-top">
-                	<form action="/bbs/" method="POST">	
-                		{{ form_bb.non_field_errors }}
-				    	<div class="form-group" id="org_name_tb">
-					        {{ form_bb.north.errors }}
-					        <label class="sr-only" for="id_lake_id">Site ID:</label>
-					        {{ form_bb.north }}
-						    
-				    	</div>
-				    	<div class="form-group" id="org_name_tb">
-					        {{ form_bb.south.errors }}
-					        <label class="sr-only" for="id_lake_id">:</label>
-					        {{ form_bb.south }}
-						    
-				    	</div>
-				    	<div class="form-group"  id="lake_name_tb">
-					        {{ form_bb.east.errors }}
-					        <label class="sr-only" for="id_lake_name">:</label>
-					        {{ form_bb.east }}
-						    
-				    	</div>
-				    	<div class="form-group"  id="lake_name_tb">
-					        {{ form_bb.west.errors }}
-					        <label class="sr-only" for="id_lake_name">:</label>
-					        {{ form_bb.west }}
-						    
-				    	</div>
-				    	
+                	<form action="/site_to_lake/" method="POST">	
+				    	{{ forms2l.as_p }}
 				    	{% csrf_token %}
 			  			<button type="submit" class="btn" style="font-size: large">Submit</button>
 				    </form> 
                 </div>
             </div>
-	    </div>
-		<div class="col-md-1 middle-border"></div>
-        <div class="col-md-1"></div>
-	    <br>
-	    <br>
-	    <div class="col-md-5"></div>
+		</div>
 	</div>
 	<hr>
+	
 
 
 

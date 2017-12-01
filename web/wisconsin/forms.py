@@ -38,13 +38,13 @@ class WaterbodiesForm(forms.Form):
 	  lake_id = forms.CharField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter Lake ID (e.g. 120017988)...',
+				'placeholder' : 'Enter ID (e.g. 120017988)...',
 			}
 		), label='', required=False,)
 	  lake_name = forms.CharField(widget=forms.TextInput(
 			attrs={
 				'class' : 'form-control',
-				'placeholder' : 'Enter Lake Name (e.g. Coon Lake)...',
+				'placeholder' : 'Enter Name (e.g. Coon Lake)...',
 			}
 		), label='', required=False,)
 	  area_cmp = forms.ChoiceField(choices=AREA_COMPARATORS, widget=forms.Select(
