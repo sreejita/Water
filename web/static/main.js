@@ -1,9 +1,17 @@
-console.log("HELLOOO");
+			
 			$(document).ready(function() {
 				console.log( "ready!" );
+
+				$('.download').click(function(){
+					
+				});
 				//$('#lake_id_tb').hide();
+				$('.album').click(function() {
+					console.log("clicked");
+					$('#navbarHeader').collapse('hide');
+				});
 				$('[data-toggle="tooltip"]').tooltip();  
-				
+				$()
 				/*$('#waterbodies-dropdown').change(function(){
 			        if($('#waterbodies-dropdown').val() == 'lake_id') {
 			            $('#lake_id_tb').show(); 

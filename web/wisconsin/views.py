@@ -3,8 +3,10 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from django.http import Http404
+from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
+import csv
 
 from wisconsin.models import Waterbodies
 from wisconsin.models import W2S
@@ -165,6 +167,7 @@ def lake_to_site(request, id):
 def site_to_lake(request):
 	lakes = ''
 	id = ''
+	writer = ''
 	if request.method == 'POST':
 		forms2l = SiteToLakeForm(request.POST)
 		if forms2l.is_valid():
@@ -202,8 +205,12 @@ def waterbodies(request, page):
 	lake_list = ''
 	get_params = '?'
 	pg_range = ''
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="waterbodies.csv"'
+	writer = csv.writer(response)
 	#lake_name = ''
 	if request.method == 'GET':
+		print "IN view"
 		form_waterbodies = WaterbodiesForm(request.GET)
 		if form_waterbodies.is_valid():
 			cd = form_waterbodies.cleaned_data
@@ -229,17 +236,25 @@ def waterbodies(request, page):
 				kwargs['fcode'] = fcode
 				get_params += 'fcode=' + fcode + '&'
 			
+			print "HEre"
 			lake_list = Waterbodies.objects.filter(**kwargs)
+			if(page == "0"):
+				print "Download"
+				lakes = lake_list
+				writer.writerow(["ID", "GNIS Name", "GNIS_ID", "Area(sq. km.)" , "Elevation(ft.)", "FType", "FCode", "FDate", "Shape Length(dec. deg.)", "Shape Area(sq. dec. deg."])
+				for l in lakes:
+					writer.writerow([l.nhd_lake_id, l.gnis_name, l.gnis_id, l.area_sqkm, l.elevation_feet, l.ftype, l.fcode, l.fdate, l.shape_leng_decimaldegrees, l.shape_area_sqdecimaldegrees])
+				return response
+			else: 
+				print "table"
+				paginator = Paginator(lake_list, 20)
 
-			paginator = Paginator(lake_list, 20)
-
-			
-			try:
-				lakes = paginator.page(page)
-			except PageNotAnInteger:
-				lakes = paginator.page(1)
-			except EmptyPage:
-				lakes = paginator.page(paginator.num_pages)
+				try:
+					lakes = paginator.page(page)
+				except PageNotAnInteger:
+					lakes = paginator.page(1)
+				except EmptyPage:
+					lakes = paginator.page(paginator.num_pages)
 
 	'''else:
 		form = LakeToSiteForm()
