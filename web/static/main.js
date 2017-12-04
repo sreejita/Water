@@ -2,7 +2,10 @@ console.log("HELLO");
 		$(document).ready(function() {
 			console.log( "ready!" );
 
-			
+			$('.album').click(function() {
+ 					//console.log("clicked");
+ 					$('#navbarHeader').collapse('hide');
+ 				});
 			$('[data-toggle="tooltip"]').tooltip();  
 			
 		});

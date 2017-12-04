@@ -94,6 +94,19 @@ def bb_detail(request, id):
 		'bb_id' : id,
 	})
 
+def lake_to_site_download(request, id):
+	sites = ''
+
+	sites = W2S.objects.filter(nhd_lake_id=id)
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="sitesForLake_' + id + '.csv"'
+	writer = csv.writer(response)
+	writer.writerow(["Site ID", "Monitoring Location", "Is Inside Lake", "Distance from shore(in m.)"])
+	for s in sites:
+		writer.writerow([s.site_id, s.monitoringlocationname, s.isinsidelake, s.disttoshore_m])
+	return response
+
+
 def lake_to_site(request, id):
 	lake_name = ''
 	sites = ''

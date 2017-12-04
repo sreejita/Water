@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name ='index'),
     url(r'^lake_to_site/(?P<id>.+)/', views.lake_to_site, name ='lake_to_site'),
+    url(r'^lake_to_site_download/(?P<id>.+)/', views.lake_to_site_download, name ='lake_to_site_download'),
     url(r'^site_to_lake/', views.site_to_lake, name ='site_to_lake'),
     url(r'^waterbodies/(?P<page>\d+)/', views.waterbodies, name ='waterbodies'),
     url(r'^lake/(?P<id>.+)/', views.lake_detail, name ='lake_detail'),
