@@ -249,7 +249,6 @@ def waterbodies(request, page):
 				kwargs['fcode'] = fcode
 				get_params += 'fcode=' + fcode + '&'
 			
-			print "HEre"
 			lake_list = Waterbodies.objects.filter(**kwargs)
 			if(page == "0"):
 				print "Download"
@@ -292,47 +291,58 @@ def waterbodies(request, page):
 		#'lake_name' : lake_name,
 	})
 
-def sites(request):
+def sites(request, page):
 	sites = ''
-	if request.method == 'POST':
-		form_sites = SitesForm(request.POST)
+	site_list = ''
+	get_params = '?'
+	pg_range = ''
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="sites.csv"'
+	writer = csv.writer(response)
+	if request.method == 'GET':
+		form_sites = SitesForm(request.GET)
 		if form_sites.is_valid():
 			cd = form_sites.cleaned_data
-			site_id = cd['site_id']
-			org_name = cd['org_name']
-			org_id = cd['org_id']
+			site_id = request.GET.get('site_id', '')
+			org_name = request.GET.get('org_name', '')
+			org_id = request.GET.get('org_id', '')
 			#monitoring_location = cd['monitoring_location']
-			huc = cd['huc']
+			huc = request.GET.get('huc', '')
 			kwargs = { }
+			
 			if(site_id) :
 				kwargs['site_id'] = site_id
+				get_params += 'site_id=' + site_id + '&'
 			if(org_name) :
 				kwargs['{0}__{1}'.format('organizationformalname', 'icontains')] = org_name
+				get_params += 'org_name=' + org_name + '&'
 			if(org_id) :
 				kwargs['organizationidentifier'] = org_id
-			'''if(monitoring_location) :
-				kwargs['monitoringlocationname'] = monitoring_location'''
+				get_params += 'org_id=' + org_id + '&'
 			if(huc) :
 				kwargs['huceightdigitcode'] = huc
-			sites = Sites.objects.filter(**kwargs)
+				get_params += 'huc=' + huc + '&'
+			site_list = Sites.objects.filter(**kwargs)
 
-	else:
-		form = LakeToSiteForm()
-		forms2l = SiteToLakeForm()
-		form_waterbodies = WaterbodiesForm()
-		form_sites = SitesForm()
-		form_bb= BoundingBoxForm()
-		return render(request, 'wisconsin/index.html', {
-			#'lakes' : lakes,
-			'form' : form,
-			'forms2l' : forms2l,
-			'form_waterbodies' : form_waterbodies,
-			'form_sites' : form_sites,
-			'form_bb' : form_bb,
-		})
+			if(page == "0"):
+				print "Download Sites"
+				sites = site_list
+				writer.writerow(["SITE_ID", "OrganizationFormalName", "OrganizationIdentifier", "MonitoringLocationName", "MonitoringLocationTypeName", "MonitoringLocationDescriptionText",	"HUCEightDigitCode", "DrainageAreaMeasure/MeasureValue", "DrainageAreaMeasure/MeasureUnitCode", "ContributingDrainageAreaMeasure/MeasureValue", "ContributingDrainageAreaMeasure/MeasureUnitCode", "LatitudeMeasure", "LongitudeMeasure", "SourceMapScaleNumeric", "HorizontalAccuracyMeasure/MeasureValue", "HorizontalAccuracyMeasure/MeasureUnitCode", "HorizontalCollectionMethodName", "HorizontalCoordinateReferenceSystemDatumName", "VerticalMeasure/MeasureValue", "VerticalMeasure/MeasureUnitCode", "VerticalAccuracyMeasure/MeasureValue", "VerticalAccuracyMeasure/MeasureUnitCode", "VerticalCollectionMethodName", "VerticalCoordinateReferenceSystemDatumName", "CountryCode", "StateCode", "CountyCode", "AquiferName", "FormationTypeText", "AquiferTypeName", "ConstructionDateText", "WellDepthMeasure/MeasureValue", "WellDepthMeasure/MeasureUnitCode", "WellHoleDepthMeasure/MeasureValue"])
+				for s in sites:
+					writer.writerow([s.site_id, s.organizationformalname, s.organizationidentifier, s.monitoringlocationname, s.monitoringlocationtypename, s.monitoringlocationdescriptiontext, s.huceightdigitcode, s.drainageareameasure_measurevalue, s.drainageareameasure_measureunitcode, s.contributingdrainageareameasure_measurevalue, s.contributingdrainageareameasure_measureunitcode, s.latitudemeasure, s.longitudemeasure, s.sourcemapscalenumeric, s.horizontalaccuracymeasure_measurevalue, s.horizontalaccuracymeasure_measureunitcode, s.horizontalcollectionmethodname, s.horizontalcoordinatereferencesystemdatumname, s.verticalmeasure_measurevalue, s.verticalmeasure_measureunitcode, s.verticalaccuracymeasure_measurevalue, s.verticalaccuracymeasure_measureunitcode, s.verticalcollectionmethodname, s.verticalcoordinatereferencesystemdatumname, s.countrycode, s.statecode, s.countycode, s.aquifername, s.formationtypetext, s.aquifertypename, s.constructiondatetext, s.welldepthmeasure_measurevalue, s.welldepthmeasure_measureunitcode, s.wellholedepthmeasure_measurevalue])
+				return response
+			else:
+				paginator = Paginator(site_list, 20)
+				try:
+					sites = paginator.page(page)
+				except PageNotAnInteger:
+					sites = paginator.page(1)
+				except EmptyPage:
+					sites = paginator.page(paginator.num_pages)
 
 	return render(request, 'wisconsin/sites.html', {
 		'sites' : sites,
+		'params' : get_params,
 		#'site_id' : id,
 		#'lake_name' : lake_name,
 	})

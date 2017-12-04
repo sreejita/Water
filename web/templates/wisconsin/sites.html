@@ -7,9 +7,13 @@
 	<div class="grey-wrapper">
 		{% if sites %}
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-10">
 					<h3 id="heading">Sites
 					</h3>
+				</div>
+				<div class="col-md-2">
+					<a class="download" href="/sites/0/{{ params }}">Download</a>
+					<i class="fa fa-info-circle" aria-hidden="true" style="font-size: 12px; vertical-align: middle;" data-toggle="tooltip" data-placement="top" title="This may takes some time."></i> 
 				</div>
 			</div>
 			<div class="row top-buffer">
@@ -43,6 +47,24 @@
 						</tbody>
 						
 					</table>
+					{% if sites.has_other_pages %}
+						<div class="pagination" style="float: right;">
+							<span class="step-links">
+							{% if sites.has_previous %}
+							<a href="/sites/{{ sites.previous_page_number }}/{{ params }}">previous</a>
+							{% endif %}
+
+							<!-- Showing the page numbers in Html Page -->
+							<span class="current">
+								Page {{ sites.number }} of {{ sites.paginator.num_pages }}.	
+							</span>
+
+							{% if sites.has_next %}
+							<a href="/sites/{{ sites.next_page_number }}/{{ params }}">next</a>
+							{% endif %}
+							</span>
+						</div>
+					{% endif %}
 				</div>
 			</div>
 		{% else %}
