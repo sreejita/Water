@@ -1,35 +1,16 @@
-			
-			$(document).ready(function() {
-				console.log( "ready!" );
+console.log("HELLO");			
+		$(document).ready(function() {
+			console.log( "ready!" );
 
-				$('.download').click(function(){
-					
-				});
-				//$('#lake_id_tb').hide();
-				$('.album').click(function() {
-					console.log("clicked");
-					$('#navbarHeader').collapse('hide');
-				});
-				$('[data-toggle="tooltip"]').tooltip();  
-				$()
-				/*$('#waterbodies-dropdown').change(function(){
-			        if($('#waterbodies-dropdown').val() == 'lake_id') {
-			            $('#lake_id_tb').show(); 
-			            $('#lake_name_tb').hide(); 
-			            $('#area_tb').hide();
-			        } else if($('#waterbodies-dropdown').val() == 'lake_name') {
-			            $('#lake_name_tb').show(); 
-			            $('#lake_id_tb').hide(); 
-			            $('#area_tb').hide();
-			        } else {
-			        	$('#area_tb').show();
-			        	$('#lake_id_tb').hide(); 
-			        	$('#lake_name_tb').hide();
-			        }
-			    }); */
-			});
+			
+			$('[data-toggle="tooltip"]').tooltip();  
+			
+		});
 		function onL2SSubmit() {
-			var actionUrl = "/lake_to_site/" + $('#id_lake_id').val() + "/";
+			console.log("HEYYYYYYY THERE");
+			console.log($('#l2s_lake_id').val());
+			console.log("HEYYYYYYY THERE..");
+			var actionUrl = "/lake_to_site/" + $('#l2s_lake_id').val() + "/";
 			$('#forml2s').attr('action', actionUrl);
 		}
 		function initMap() { 

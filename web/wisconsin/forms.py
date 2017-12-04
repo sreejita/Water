@@ -3,6 +3,7 @@ from django import forms
 class LakeToSiteForm(forms.Form):
 	lake_id = forms.CharField(widget=forms.TextInput(
 			attrs={
+				'id' : 'l2s_lake_id',
 				'class' : 'form-control',
 				'placeholder' : 'Enter Lake ID (e.g. 37649095)...',
 				'required' : 'true',
