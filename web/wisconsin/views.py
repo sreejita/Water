@@ -253,7 +253,7 @@ def waterbodies(request, page):
 			if(page == "0"):
 				print "Download"
 				lakes = lake_list
-				writer.writerow(["ID", "GNIS Name", "GNIS_ID", "Area(sq. km.)" , "Elevation(ft.)", "FType", "FCode", "FDate", "Shape Length(dec. deg.)", "Shape Area(sq. dec. deg."])
+				writer.writerow(["NHD_ID", "GNIS Name", "GNIS_ID", "Area(sq. km.)" , "Elevation(ft.)", "FType", "FCode", "FDate", "Shape Length(dec. deg.)", "Shape Area(sq. dec. deg."])
 				for l in lakes:
 					writer.writerow([l.nhd_lake_id, l.gnis_name, l.gnis_id, l.area_sqkm, l.elevation_feet, l.ftype, l.fcode, l.fdate, l.shape_leng_decimaldegrees, l.shape_area_sqdecimaldegrees])
 				return response
