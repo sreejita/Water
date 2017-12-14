@@ -8,6 +8,8 @@ https://docs.djangoproject.com/en/1.9/howto/deployment/wsgi/
 """
 
 import os
+import sys
+sys.path.append('/home/ec2-user/anaconda/envs/water/lib/python2.7/site-packages')
 
 from django.core.wsgi import get_wsgi_application
 
