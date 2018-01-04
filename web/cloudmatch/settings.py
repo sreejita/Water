@@ -25,7 +25,7 @@ SECRET_KEY = 'j_av*-%n()$gxnx5l7!bc_clpu@&$aosrq6u3u&uf(d8boo+_r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['madwater.io','ec2-54-210-141-13.compute-1.amazonaws.com']
+ALLOWED_HOSTS = ['localhost','madwater.io','ec2-54-210-141-13.compute-1.amazonaws.com']
 
 
 # Application definition

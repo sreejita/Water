@@ -21,6 +21,7 @@ from wisconsin.forms import WaterbodiesForm
 from wisconsin.forms import SitesForm
 from wisconsin.forms import BoundingBoxForm
 import decimal
+from characteristics import *
 
 class DecimalEncoder(json.JSONEncoder):
     def _iterencode(self, o, markers=None):
@@ -47,6 +48,25 @@ def index(request):
 		'form_bb' : form_bb,
 	})
 
+def characteristics(request):
+	
+	return render(request, 'wisconsin/characteristics.html', {
+			'chars': chars,
+		});
+
+def characteristics_summary(request, char):
+	#depth = {}
+	summary = char_summary[char]
+	month = month_summary[char]
+	year = year_summary[char]
+	depth = depth_summary[char]
+	return render(request, 'wisconsin/characteristics_summary.html', {
+			'char' : char,
+			'summary' : summary,
+			'month' :month,
+			'year' : year,
+			'depth' : depth,
+		});
 
 '''def lake_detail(request, id):
 	try:

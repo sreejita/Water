@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<!--a href="{% url 'index' %}">
+		Back to Home
+	</a-->
+	<div class="grey-wrapper">
+		
+		<div class="row">
+			<div class="col-md-12">
+				<h3 id="heading">{{char}}
+				</h3>
+			</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-12">
+				<caption>Statistics</caption>
+				<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
+					<thead>
+						<tr class="bootstrap-blue-bg">
+							<th>Characteristic</th>
+							<th>Value</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						{% for k,v in summary.items %}
+							<tr>
+								<td>{{k}}</td>
+								<td>{{v}}</td>
+							</tr>
+						{% endfor %}
+						
+					</tbody>
+					
+				</table>
+			</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-12">
+				<caption>Samples per month</caption>
+				<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
+					<thead>
+						<tr class="bootstrap-blue-bg">
+							<th>Month</th>
+							<th>No. of samples</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						{% for k,v in month.items %}
+							<tr>
+								<td>{{k}}</td>
+								<td>{{v}}</td>
+							</tr>
+						{% endfor %}
+						
+					</tbody>
+					
+				</table>
+			</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-12">
+				<caption>Samples per year</caption>
+				<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
+					<thead>
+						<tr class="bootstrap-blue-bg">
+							<th>Year</th>
+							<th>No. of samples</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						{% for k,v in year.items %}
+							<tr>
+								<td>{{k}}</td>
+								<td>{{v}}</td>
+							</tr>
+						{% endfor %}
+						
+					</tbody>
+					
+				</table>
+			</div>
+		</div>
+		<div class="row top-buffer">
+			<div class="col-md-12">
+				<caption>Depths at which {{char}} occurs and percentage of values at each depth</caption>
+				<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
+					<thead>
+						<tr class="bootstrap-blue-bg">
+							<th>Depth</th>
+							<th>Percentage of values</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						{% for k,v in depth.items %}
+							<tr>
+								<td>{{k}}</td>
+								<td>{{v}}</td>
+							</tr>
+						{% endfor %}
+						
+					</tbody>
+					
+				</table>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %} 
