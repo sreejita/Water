@@ -117,4 +117,7 @@ footer {
 footer p {
   margin-bottom: .25rem;
 }
-
+.table-scroll {
+  height:300px; 
+  overflow: auto;
+}

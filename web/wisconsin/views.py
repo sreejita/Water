@@ -21,6 +21,7 @@ from wisconsin.forms import WaterbodiesForm
 from wisconsin.forms import SitesForm
 from wisconsin.forms import BoundingBoxForm
 import decimal
+import collections
 from characteristics import *
 
 class DecimalEncoder(json.JSONEncoder):
@@ -56,9 +57,24 @@ def characteristics(request):
 
 def characteristics_summary(request, char):
 	#depth = {}
-	summary = char_summary[char]
-	month = month_summary[char]
-	year = year_summary[char]
+	summary_uo = char_summary[char]
+	summary = collections.OrderedDict()
+	summary_order = ["no_of_values","mean", "std", "median", "range"]
+	for s in summary_order:
+		if s in summary_uo:
+			summary[s] = summary_uo[s]
+	print summary
+	month_uo = month_summary[char]
+	month_order = ["Jan", "Feb", "Mar", "Apr", "May","Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"]
+	month = collections.OrderedDict()
+	for m in month_order:
+		if m in month_uo:
+			month[m] = month_uo[m]
+	print month
+	year = collections.OrderedDict(sorted(year_summary[char].items()))
+	#sorted(year, key=lambda key: year[key])
+	#print year
+	sorted(depth_summary[char])
 	depth = depth_summary[char]
 	return render(request, 'wisconsin/characteristics_summary.html', {
 			'char' : char,
