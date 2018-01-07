@@ -7,6 +7,9 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 import csv
+import plotly.plotly as py
+import plotly.graph_objs as go
+import plotly.offline as opy
 
 from wisconsin.models import Waterbodies
 from wisconsin.models import W2S
@@ -53,6 +56,77 @@ def characteristics(request):
 	
 	return render(request, 'wisconsin/characteristics.html', {
 			'chars': chars,
+		});
+
+def characteristics_graph(request, charac):
+	#charac = "Dissolved oxygen"
+	month_uo = month_summary[charac]
+	print month_uo
+	month_order = ["Jan", "Feb", "Mar", "Apr", "May","Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"]
+	month = collections.OrderedDict()
+	for m in month_order:
+		if m in month_uo:
+			month[m] = month_uo[m]
+	month_val = month.values()
+	print month_val
+	year_data= year_summary[charac]
+	year_val = year_data.values()
+	#print year_val
+	data = [go.Bar(
+        	x=month_order,
+        	y=month_val
+    )]
+    #print(val)
+	layout = go.Layout(
+        title='No. of samples per month for ' + charac,
+        xaxis=dict(
+            title='Month',
+            titlefont=dict(
+                family='Courier New, monospace',
+                size=18,
+                color='#7f7f7f'
+            )
+        ),
+        yaxis=dict(
+            title='No. of samples',
+            titlefont=dict(
+                family='Courier New, monospace',
+                size=18,
+                color='#7f7f7f'
+            )
+        )
+    )
+	fig = go.Figure(data=data, layout=layout)
+	div1 = opy.plot(fig, auto_open=False, output_type='div')
+
+	data1 = [go.Histogram(x=year_val)]
+	year_val.sort()
+	print year_val
+	layout1 = go.Layout(
+    	title='Samples spread across years for ' + charac,
+    	xaxis=dict(
+	        title='No. of samples',
+	        titlefont=dict(
+	            family='Courier New, monospace',
+	            size=18,
+	            color='#7f7f7f'
+	        )
+	    ),
+	    yaxis=dict(
+	        title='No. of years',
+	        titlefont=dict(
+	            family='Courier New, monospace',
+	            size=18,
+	            color='#7f7f7f'
+	        )
+	    )
+	)
+	fig1 = go.Figure(data=data1, layout=layout1)
+	div2 = opy.plot(fig1, auto_open=False, output_type='div')
+	return render(request, 'wisconsin/characteristics_graph.html', {
+			'chars': charac,
+			'graph1' : div1,
+			'graph2': div2,
 		});
 
 def characteristics_summary(request, char):

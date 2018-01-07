@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<!--a href="{% url 'index' %}">
+		Back to Home
+	</a-->
+	<div class="grey-wrapper">
+		<div class="row">
+			<div class="col-md-12">
+				<h3 id="heading">{{chars}}
+				</h3>
+			</div>
+		</div>
+		{% if graph1 %}
+		<div class="row">
+			<div class="col-md-12" style="width:600;height:500">
+				{{ graph1|safe }}
+			</div>
+		</div>
+		{% endif %}
+		{% if graph2 %}
+		<div class="row top-buffer">
+			<div class="col-md-12" style="width:600;height:500">
+				{{ graph2|safe }}
+			</div>
+		</div>
+		{% endif %}
+	</div>
+
+{% endblock content %} 

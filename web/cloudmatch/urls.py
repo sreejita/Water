@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^bb/(?P<id>.+)/', views.bb_detail, name ='bb_detail'),
     url(r'^characteristics/', views.characteristics, name ='characteristics'),
     url(r'^characteristics_summary/(?P<char>.+)/', views.characteristics_summary, name ='characteristics_summary'),
+    url(r'^characteristics_graph/(?P<charac>.+)/', views.characteristics_graph, name ='characteristics_graph'),
     # July 17 Login Change
     #url(r'^frontend/', include('frontend.urls',namespace='frontend',app_name='frontend')),
     #url(r'^$', RedirectView.as_view(permanent=False, url='/frontend/ulogin/')),
