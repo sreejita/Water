@@ -121,3 +121,21 @@ footer p {
   height:300px; 
   overflow: auto;
 }
+
+.table-fixed tbody {
+height: 300px;
+overflow: auto;
+display: block;
+}
+.table-fixed tr {
+  display: block;
+}
+.table-fixed tbody td {
+display: inline-block;
+width: 49.75%
+}
+
+.table-fixed thead th {
+display: inline-block;
+width: 49%
+}

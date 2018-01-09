@@ -25,6 +25,13 @@
 			</div>
 		</div>
 		{% endif %}
+		{% if graph3 %}
+		<div class="row top-buffer">
+			<div class="col-md-12" style="width:600;height:500">
+				{{ graph3|safe }}
+			</div>
+		</div>
+		{% endif %}
 	</div>
 
 {% endblock content %} 

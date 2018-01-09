@@ -12,7 +12,7 @@
 				</h3>
 			</div>
 			<div class="col-md-2">
-				<a class="download" href="{% url 'characteristics_graph' char %}" target="_blank">View Graphs</a>
+				<!--a class="download" href="{% url 'characteristics_graph' char %}" target="_blank">View Graphs</a-->
 			</div>
 		</div>
 		<div class="row top-buffer">
@@ -63,8 +63,15 @@
 				</table>
 			</div>
 		</div>
+		{% if graph1 %}
+		<div class="row">
+			<div class="col-md-12" style="width:600;height:500">
+				{{ graph1|safe }}
+			</div>
+		</div>
+		{% endif %}
 		<div class="row top-buffer">
-			<div class="col-md-12 table-scroll">
+			<div class="col-md-12 table-fixed">
 				<caption>Samples per year</caption>
 				<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
 					<thead>
@@ -87,17 +94,23 @@
 				</table>
 			</div>
 		</div>
+		{% if graph2 %}
+		<div class="row">
+			<div class="col-md-12" style="width:600;height:500">
+				{{ graph2|safe }}
+			</div>
+		</div>
+		{% endif %}
 		<div class="row top-buffer">
-			<div class="col-md-12 table-scroll">
+			<div class="col-md-12 table-fixed">
 				<caption>Depths at which {{char}} occurs and percentage of values at each depth</caption>
-				<table class="table table-hover table-bordered table-responsive " style="background: #ffffff;">
+				<table class="table table-hover table-bordered table-responsive" style="background: #ffffff;">
 					<thead>
 						<tr class="bootstrap-blue-bg">
 							<th>Depth</th>
 							<th>Percentage of values</th>
 						</tr>
 					</thead>
-					
 					<tbody>
 						{% for k,v in depth.items %}
 							<tr>

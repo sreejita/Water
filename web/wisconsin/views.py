@@ -61,17 +61,28 @@ def characteristics(request):
 def characteristics_graph(request, charac):
 	#charac = "Dissolved oxygen"
 	month_uo = month_summary[charac]
-	print month_uo
+	#print month_uo
 	month_order = ["Jan", "Feb", "Mar", "Apr", "May","Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"]
 	month = collections.OrderedDict()
 	for m in month_order:
 		if m in month_uo:
 			month[m] = month_uo[m]
 	month_val = month.values()
-	print month_val
+	#print month_val
 	year_data= year_summary[charac]
 	year_val = year_data.values()
 	#print year_val
+	depth_data = depth_summary2[charac]
+	depth_val = []
+	for key,val in depth_data.items():
+		i = 1
+		while i <= val:
+			depth_val.append(key)
+			i = i+1
+
+
+	#print depth_val
+
 	data = [go.Bar(
         	x=month_order,
         	y=month_val
@@ -101,7 +112,7 @@ def characteristics_graph(request, charac):
 
 	data1 = [go.Histogram(x=year_val)]
 	year_val.sort()
-	print year_val
+	#print year_val
 	layout1 = go.Layout(
     	title='Samples spread across years for ' + charac,
     	xaxis=dict(
@@ -123,10 +134,37 @@ def characteristics_graph(request, charac):
 	)
 	fig1 = go.Figure(data=data1, layout=layout1)
 	div2 = opy.plot(fig1, auto_open=False, output_type='div')
+
+	data2 = [go.Histogram(x=depth_val)]
+	depth_val.sort()
+	print depth_val
+	layout2 = go.Layout(
+    	title='Samples spread across depths for ' + charac,
+    	xaxis=dict(
+	        title='Depth',
+	        titlefont=dict(
+	            family='Courier New, monospace',
+	            size=18,
+	            color='#7f7f7f'
+	        )
+	    ),
+	    yaxis=dict(
+	        title='No. of samples',
+	        titlefont=dict(
+	            family='Courier New, monospace',
+	            size=18,
+	            color='#7f7f7f'
+	        )
+	    )
+	)
+	fig2 = go.Figure(data=data2, layout=layout2)
+	div3 = opy.plot(fig2, auto_open=False, output_type='div')
+
 	return render(request, 'wisconsin/characteristics_graph.html', {
 			'chars': charac,
 			'graph1' : div1,
 			'graph2': div2,
+			'graph3' : div3,
 		});
 
 def characteristics_summary(request, char):
@@ -145,17 +183,71 @@ def characteristics_summary(request, char):
 		if m in month_uo:
 			month[m] = month_uo[m]
 	print month
-	year = collections.OrderedDict(sorted(year_summary[char].items()))
-	#sorted(year, key=lambda key: year[key])
-	#print year
-	sorted(depth_summary[char])
-	depth = depth_summary[char]
+	month_val = month.values();
+	data = [go.Bar(
+        	x=month_order,
+        	y=month_val
+    )]
+    #print(val)
+	layout = go.Layout(
+        title='No. of samples per month for ' + char,
+        xaxis=dict(
+            title='Month',
+            titlefont=dict(
+                family='Courier New, monospace',
+                size=18,
+                color='#7f7f7f'
+            )
+        ),
+        yaxis=dict(
+            title='No. of samples',
+            titlefont=dict(
+                family='Courier New, monospace',
+                size=18,
+                color='#7f7f7f'
+            )
+        )
+    )
+	fig = go.Figure(data=data, layout=layout)
+	div1 = opy.plot(fig, auto_open=False, output_type='div')
+
+	year_data = year_summary[char]
+	year = collections.OrderedDict(sorted(year_data.items()))
+	year_val = year_data.values()
+	data1 = [go.Histogram(x=year_val)]
+	#year_val.sort()
+	#print year_val
+	layout1 = go.Layout(
+    	title='Samples spread across years for ' + char,
+    	xaxis=dict(
+	        title='No. of samples',
+	        titlefont=dict(
+	            family='Courier New, monospace',
+	            size=18,
+	            color='#7f7f7f'
+	        )
+	    ),
+	    yaxis=dict(
+	        title='No. of years',
+	        titlefont=dict(
+	            family='Courier New, monospace',
+	            size=18,
+	            color='#7f7f7f'
+	        )
+	    )
+	)
+	fig1 = go.Figure(data=data1, layout=layout1)
+	div2 = opy.plot(fig1, auto_open=False, output_type='div')
+
+	depth = collections.OrderedDict(sorted(depth_summary[char].items()))
 	return render(request, 'wisconsin/characteristics_summary.html', {
 			'char' : char,
 			'summary' : summary,
 			'month' :month,
 			'year' : year,
 			'depth' : depth,
+			'graph1' : div1,
+			'graph2' : div2,
 		});
 
 '''def lake_detail(request, id):
