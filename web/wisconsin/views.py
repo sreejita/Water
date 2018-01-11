@@ -137,7 +137,8 @@ def characteristics_graph(request, charac):
 
 	data2 = [go.Histogram(x=depth_val)]
 	depth_val.sort()
-	print depth_val
+	print "Depth:"
+	print len(depth_val)
 	layout2 = go.Layout(
     	title='Samples spread across depths for ' + charac,
     	xaxis=dict(
